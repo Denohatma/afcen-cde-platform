@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: cde-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cde
+      POSTGRES_USER: cde
+      POSTGRES_PASSWORD: cde_dev_2026
+    ports:
+      - "5434:5432"
+    volumes:
+      - cde_data:/var/lib/postgresql/data
+
+volumes:
+  cde_data:
