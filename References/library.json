@@ -1,0 +1,1102 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "library_version": "0.1.0",
+    "updated": "2026-07-15",
+    "owner": "AfCEN",
+    "status": "starter",
+    "notes": "Starter library. Every entry carries a resolvable locator per FR-14 and a range with a sample count per FR-16. Entries with n<3 cannot raise a Material flag per FR-18. Escalation is a placeholder until a named index is set: see escalation.indices. Do not set Material thresholds on this library until meta.status reaches 'production'."
+  },
+  "sources": {
+    "esmap2026": {
+      "publisher": "ESMAP / World Bank",
+      "title": "Understanding the Cost of Transmission Infrastructure: Insights from World Bank Group-Financed Transmission Projects",
+      "year": 2026,
+      "url": "https://www.esmap.org/publications/understanding-cost-transmission-infrastructure-insights-world-bank-group-financed",
+      "tier": 1,
+      "primary": true,
+      "licence": "CC BY 3.0 IGO",
+      "licence_confirmed": false,
+      "coverage": "74 World Bank Group transmission projects, 2000-2024, USD 21bn, mined from 469 screened projects. Plus a literature review of six prior studies.",
+      "locator_required": true
+    },
+    "miso_mtep": {
+      "publisher": "Midcontinent Independent System Operator",
+      "title": "Transmission Cost Estimation Guide (MTEP series)",
+      "year": 2024,
+      "url": "",
+      "tier": 1,
+      "primary": false,
+      "licence": "unknown",
+      "licence_confirmed": false,
+      "coverage": "US component unit costs by voltage: line, substation, bay, shunt reactor. Updated annually.",
+      "locator_required": true
+    },
+    "bulambuli_pfs_2020": {
+      "publisher": "responsAbility Renewable Energy Holding",
+      "title": "Pre-Feasibility Study for the Proposed 132 kV Bulambuli-Moroto-Kitgum Transmission Project (Phase One)",
+      "year": 2020,
+      "url": "",
+      "tier": 3,
+      "primary": true,
+      "licence": "Developer project data. TOR Section 14.",
+      "licence_confirmed": true,
+      "coverage": "Single project, Uganda. Pre-feasibility level.",
+      "locator_required": true
+    },
+    "ghanzi_gobabis_pfs_2026": {
+      "publisher": "AfCEN",
+      "title": "Botswana-Namibia 400 kV Ghanzi-Gobabis Interconnector Pre-Feasibility Study",
+      "year": 2026,
+      "url": "",
+      "tier": 3,
+      "primary": true,
+      "licence": "Own work.",
+      "licence_confirmed": true,
+      "coverage": "Single project, Botswana-Namibia. Pre-feasibility level.",
+      "locator_required": true
+    },
+    "aace_18r97": {
+      "publisher": "AACE International",
+      "title": "Recommended Practice 18R-97, Cost Estimate Classification System. See also 98R-18 for transport infrastructure.",
+      "year": 1997,
+      "url": "https://web.aacei.org/docs/default-source/toc/toc_18r-97.pdf",
+      "tier": 1,
+      "primary": false,
+      "licence": "AACE single user licence. Reference only.",
+      "licence_confirmed": false,
+      "coverage": "Estimate classification and accuracy ranges.",
+      "locator_required": true
+    }
+  },
+  "escalation": {
+    "indices": {
+      "PLACEHOLDER_GENERIC": {
+        "name": "Placeholder generic escalation",
+        "status": "placeholder",
+        "source": "Not set. FR-15 requires a named index. Any result computed with this index is provisional and must be labelled as such.",
+        "factors": {
+          "2003": 82.0,
+          "2010": 100.0,
+          "2014": 106.0,
+          "2018": 116.0,
+          "2020": 127.0,
+          "2022": 148.0,
+          "2024": 158.0,
+          "2026": 165.0
+        }
+      }
+    }
+  },
+  "market_adjustments": [
+    {
+      "id": "MKT-DEVD-TO-DEVG",
+      "from_market": "developed",
+      "to_market": "developing",
+      "divisor_low": 1.56,
+      "divisor_high": 4.35,
+      "source_id": "esmap2026",
+      "locator": "Key Findings and Introduction. World Bank Group financed projects run 1.56 to 4.35 times below analysed developed-market benchmarks.",
+      "notes": "Wide by design. Applying it produces a band, not a point. Within the sample, Eastern and Southern Africa sits at the higher-cost end and Western and Central Africa at the lower end, so a project in East Africa should be read toward the upper part of the resulting band."
+    }
+  ],
+  "benchmarks": [
+    {
+      "id": "TL-UC-110-150-SC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 110,
+        "voltage_kv_max": 150,
+        "circuits": "single",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.304,
+        "high": 0.304,
+        "unit": "USD_M_per_km",
+        "n": 1,
+        "central": 0.304
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "transmission line unit cost as published by the underlying study. Component scope not standardised across studies.",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1, Compiled Transmission Line Unit Cost from Studies",
+      "confidence": "low",
+      "notes": "n=1. Advisory only per FR-18.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-110-150-DC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 110,
+        "voltage_kv_max": 150,
+        "circuits": "double",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.318,
+        "high": 0.421,
+        "unit": "USD_M_per_km",
+        "n": 2,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "transmission line unit cost as published by the underlying studies. Component scope not standardised.",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1, Compiled Transmission Line Unit Cost from Studies",
+      "confidence": "low",
+      "notes": "The band relevant to the 132 kV Bulambuli case. n=2, so Advisory only per FR-18 until more sources are added.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-220-230-SC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 220,
+        "voltage_kv_max": 230,
+        "circuits": "single",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.403,
+        "high": 0.854,
+        "unit": "USD_M_per_km",
+        "n": 3,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "medium",
+      "notes": "min-to-max ratio 2.12.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-220-230-DC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 220,
+        "voltage_kv_max": 230,
+        "circuits": "double",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.519,
+        "high": 1.403,
+        "unit": "USD_M_per_km",
+        "n": 4,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "medium",
+      "notes": "min-to-max ratio 2.70.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-330-345-SC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 330,
+        "voltage_kv_max": 345,
+        "circuits": "single",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.634,
+        "high": 1.22,
+        "unit": "USD_M_per_km",
+        "n": 4,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "medium",
+      "notes": "min-to-max ratio 1.92.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-330-345-DC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 330,
+        "voltage_kv_max": 345,
+        "circuits": "double",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.561,
+        "high": 1.952,
+        "unit": "USD_M_per_km",
+        "n": 5,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "low",
+      "notes": "min-to-max ratio 3.48, above the 2 to 3 spread ESMAP reports for its own sample. Verify the component scope of the extremes against the source table before using this band.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-380-400-SC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 380,
+        "voltage_kv_max": 400,
+        "circuits": "single",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.455,
+        "high": 0.455,
+        "unit": "USD_M_per_km",
+        "n": 1,
+        "central": 0.455
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "low",
+      "notes": "n=1. The band relevant to the Ghanzi-Gobabis 400 kV single circuit case. Advisory only.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-380-400-DC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 380,
+        "voltage_kv_max": 400,
+        "circuits": "double",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 1.234,
+        "high": 4.413,
+        "unit": "USD_M_per_km",
+        "n": 2,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US and Europe",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "low",
+      "notes": "min-to-max ratio 3.58. The 4.413 value is a probable outlier or a different component scope. Do not use this band until the source table is checked.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-500-SC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 500,
+        "voltage_kv_max": 500,
+        "circuits": "single",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 1.064,
+        "high": 1.542,
+        "unit": "USD_M_per_km",
+        "n": 4,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US",
+        "countries": [
+          "US"
+        ]
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "medium",
+      "notes": "min-to-max ratio 1.45, the tightest band in the table.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "TL-UC-500-DC-LIT",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 500,
+        "voltage_kv_max": 500,
+        "circuits": "double",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 0.915,
+        "high": 1.703,
+        "unit": "USD_M_per_km",
+        "n": 3,
+        "central": null
+      },
+      "basis": {
+        "price_year": 2010,
+        "currency": "USD",
+        "scope": "as published, not standardised",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US",
+        "countries": [
+          "US"
+        ]
+      },
+      "source_id": "esmap2026",
+      "locator": "Table 2.1",
+      "confidence": "medium",
+      "notes": "The double circuit low of 0.915 sits below the single circuit low of 1.064, which is not physically expected. It illustrates ESMAP's point that cross-study comparison is unreliable without scope normalisation.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "OM-RATE-WBG",
+      "metric": "om_rate_pct_of_capex",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 2.0,
+        "high": 3.0,
+        "unit": "pct_of_capex_per_year",
+        "n": 74,
+        "central": null
+      },
+      "basis": {
+        "price_year": null,
+        "currency": "n/a",
+        "scope": "operation and maintenance as reported in World Bank project documents",
+        "market": "developing",
+        "kind": "mixed"
+      },
+      "geography": {
+        "region": "World Bank client countries",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Key Findings and Introduction",
+      "confidence": "high",
+      "notes": "Below the wider literature, which reports 5 to 10 percent (Larsen 2016 as cited by ESMAP). A submission using 5 to 10 percent is not wrong, but should say which basis it follows.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "DISCOUNT-WBG",
+      "metric": "discount_rate_pct",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 6.0,
+        "high": 12.0,
+        "unit": "pct",
+        "n": 74,
+        "central": null
+      },
+      "basis": {
+        "price_year": null,
+        "currency": "n/a",
+        "scope": "discount rates applied in World Bank project appraisal",
+        "market": "developing",
+        "kind": "mixed"
+      },
+      "geography": {
+        "region": "World Bank client countries",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Key Findings and Introduction",
+      "confidence": "high",
+      "notes": "Clusters at 6 to 12 percent, consistent with concessional financing. A privately financed IPT would be expected above this band, so do not flag a higher figure without checking the financing structure.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "DELAY-RATE-WBG",
+      "metric": "schedule_delay_incidence_pct",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 70.0,
+        "high": 70.0,
+        "unit": "pct_of_projects",
+        "n": 74,
+        "central": 70.0
+      },
+      "basis": {
+        "price_year": null,
+        "currency": "n/a",
+        "scope": "incidence of implementation delay, principal causes procurement and land",
+        "market": "developing",
+        "kind": "outturn"
+      },
+      "geography": {
+        "region": "World Bank client countries",
+        "countries": []
+      },
+      "source_id": "esmap2026",
+      "locator": "Introduction and Figure 3.11, Causes of Implementation Delays",
+      "confidence": "high",
+      "notes": "Nearly 70 percent of the sample was delayed, yet about half still closed below the appraisal estimate. Use for the optimism-bias test on schedule, and note that the same does not hold for cost.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "MISO-REACTOR-MVAR",
+      "metric": "shunt_reactor_cost_per_mvar",
+      "asset": {
+        "voltage_kv_min": 500,
+        "voltage_kv_max": 500,
+        "circuits": "n/a",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 23625.0,
+        "high": 23625.0,
+        "unit": "USD_per_Mvar",
+        "n": 1,
+        "central": 23625.0
+      },
+      "basis": {
+        "price_year": 2023,
+        "currency": "USD",
+        "scope": "shunt reactor unit cost",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US",
+        "countries": [
+          "US"
+        ]
+      },
+      "source_id": "miso_mtep",
+      "locator": "MISO Transmission Cost Estimation Guide 2023, as cited in peer-reviewed secondary literature. Primary source not yet read.",
+      "confidence": "low",
+      "notes": "SECONDARY. Read from a paper citing MISO, not from MISO. Verify against the primary guide before use. Advisory only.",
+      "added": "2026-07-15",
+      "review_by": "2026-10-15",
+      "superseded_by": null
+    },
+    {
+      "id": "MISO-BAY-500",
+      "metric": "substation_bay_cost",
+      "asset": {
+        "voltage_kv_min": 500,
+        "voltage_kv_max": 500,
+        "circuits": "n/a",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 7000000.0,
+        "high": 7000000.0,
+        "unit": "USD_per_bay",
+        "n": 1,
+        "central": 7000000.0
+      },
+      "basis": {
+        "price_year": 2023,
+        "currency": "USD",
+        "scope": "breaker-and-a-half bay for a new line connection",
+        "market": "developed",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "US",
+        "countries": [
+          "US"
+        ]
+      },
+      "source_id": "miso_mtep",
+      "locator": "MISO Transmission Cost Estimation Guide 2023, as cited in peer-reviewed secondary literature. Primary source not yet read.",
+      "confidence": "low",
+      "notes": "SECONDARY. Verify against the primary guide. Advisory only.",
+      "added": "2026-07-15",
+      "review_by": "2026-10-15",
+      "superseded_by": null
+    },
+    {
+      "id": "BM-OHL-132DC-UG-2020",
+      "metric": "line_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 132,
+        "voltage_kv_max": 132,
+        "circuits": "double",
+        "technology": "HVAC",
+        "conductor": "AAAC240"
+      },
+      "value": {
+        "low": 0.153846,
+        "high": 0.153846,
+        "unit": "USD_M_per_km",
+        "n": 1,
+        "central": 0.153846
+      },
+      "basis": {
+        "price_year": 2020,
+        "currency": "USD",
+        "scope": "OHL supply and erection only. Excludes substation, contingency, consultancy, ESIA/RAP, land and compensation.",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Eastern Africa",
+        "countries": [
+          "Uganda"
+        ]
+      },
+      "source_id": "bulambuli_pfs_2020",
+      "locator": "Table 8, Project costs estimates for the Transmission line options",
+      "confidence": "low",
+      "notes": "Flat rate applied identically across the 123, 141 and 152 km options, so it carries no terrain differentiation. Benchmarks pre-feasibility practice, not feasibility practice. Project data: check TOR Section 14 before any external use.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "BM-SUBSTATION-132-UG-2020",
+      "metric": "substation_cost",
+      "asset": {
+        "voltage_kv_min": 132,
+        "voltage_kv_max": 132,
+        "circuits": "n/a",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 5000000.0,
+        "high": 5000000.0,
+        "unit": "USD_lump",
+        "n": 1,
+        "central": 5000000.0
+      },
+      "basis": {
+        "price_year": 2020,
+        "currency": "USD",
+        "scope": "Bulambuli substation, lump sum",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Eastern Africa",
+        "countries": [
+          "Uganda"
+        ]
+      },
+      "source_id": "bulambuli_pfs_2020",
+      "locator": "Table 8",
+      "confidence": "low",
+      "notes": "Identical across all three route options, so it is a placeholder rather than a costed design. Do not use as a benchmark. Held for traceability only.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "BM-ESIARAP-PERKM-UG-2020",
+      "metric": "esia_rap_study_cost_per_km",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 500.0,
+        "high": 500.0,
+        "unit": "USD_per_km",
+        "n": 1,
+        "central": 500.0
+      },
+      "basis": {
+        "price_year": 2020,
+        "currency": "USD",
+        "scope": "ESIA and RAP studies",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Eastern Africa",
+        "countries": [
+          "Uganda"
+        ]
+      },
+      "source_id": "bulambuli_pfs_2020",
+      "locator": "Table 8",
+      "confidence": "low",
+      "notes": "Rule of thumb. Advisory only.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "BM-LANDTAKE-UG-2020",
+      "metric": "land_take_acres_per_km",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 8.645,
+        "high": 8.651,
+        "unit": "acres_per_km",
+        "n": 3,
+        "central": 8.65
+      },
+      "basis": {
+        "price_year": null,
+        "currency": "n/a",
+        "scope": "land requirement, implies an effective corridor of about 35 m against a stated 30 m right of way",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Eastern Africa",
+        "countries": [
+          "Uganda"
+        ]
+      },
+      "source_id": "bulambuli_pfs_2020",
+      "locator": "Table 8, derived across the three route options",
+      "confidence": "medium",
+      "notes": "Consistent across all three options, which is what makes it usable. Cross-check against the stated 30 m RoW.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "BM-COMPENSATION-UG-2020",
+      "metric": "compensation_per_acre",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 1000.0,
+        "high": 1000.0,
+        "unit": "USD_per_acre",
+        "n": 1,
+        "central": 1000.0
+      },
+      "basis": {
+        "price_year": 2020,
+        "currency": "USD",
+        "scope": "resettlement and compensation, cash or land",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Eastern Africa",
+        "countries": [
+          "Uganda"
+        ]
+      },
+      "source_id": "bulambuli_pfs_2020",
+      "locator": "Table 8",
+      "confidence": "low",
+      "notes": "Round-number rule of thumb at 2020 prices. Must be replaced by a valuation survey at feasibility.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "BM-CONTINGENCY-UG-2020",
+      "metric": "contingency_pct",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 10.0,
+        "high": 10.0,
+        "unit": "pct_of_direct_cost",
+        "n": 1,
+        "central": 10.0
+      },
+      "basis": {
+        "price_year": null,
+        "currency": "n/a",
+        "scope": "percentage of OHL plus substation",
+        "market": "unspecified",
+        "kind": "convention"
+      },
+      "geography": {
+        "region": "Eastern Africa",
+        "countries": [
+          "Uganda"
+        ]
+      },
+      "source_id": "bulambuli_pfs_2020",
+      "locator": "Table 8",
+      "confidence": "medium",
+      "notes": "A convention, not a risk-derived contingency. AACE requires contingency to follow from risk analysis. Flag a flat 10 percent at feasibility.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "GG-CAPEX-400SC-2026",
+      "metric": "project_capex_per_km",
+      "asset": {
+        "voltage_kv_min": 400,
+        "voltage_kv_max": 400,
+        "circuits": "single",
+        "technology": "HVAC"
+      },
+      "value": {
+        "low": 1.4976,
+        "high": 1.4976,
+        "unit": "USD_M_per_km",
+        "n": 1,
+        "central": 1.4976
+      },
+      "basis": {
+        "price_year": 2026,
+        "currency": "USD",
+        "scope": "total project capex of USD 432M over 288.47 km. Whole-project scope, NOT line-only. Not comparable with line_capex_per_km entries.",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Southern Africa",
+        "countries": [
+          "Botswana",
+          "Namibia"
+        ]
+      },
+      "source_id": "ghanzi_gobabis_pfs_2026",
+      "locator": "Pre-feasibility cost estimate, stated at plus or minus 35 percent",
+      "confidence": "low",
+      "notes": "Scope differs from the literature line-only entries, so the metric name differs deliberately. The stated plus or minus 35 percent is symmetric and matches no AACE class shape, which suggests it was asserted rather than risk-derived. See reference_tables.aace.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    },
+    {
+      "id": "GG-WHEELING-2026",
+      "metric": "wheeling_charge",
+      "asset": {
+        "circuits": "n/a",
+        "technology": "n/a"
+      },
+      "value": {
+        "low": 3.2,
+        "high": 3.2,
+        "unit": "USD_per_MWh",
+        "n": 1,
+        "central": 3.2
+      },
+      "basis": {
+        "price_year": 2026,
+        "currency": "USD",
+        "scope": "cross-border wheeling",
+        "market": "developing",
+        "kind": "estimate"
+      },
+      "geography": {
+        "region": "Southern Africa",
+        "countries": [
+          "Botswana",
+          "Namibia"
+        ]
+      },
+      "source_id": "ghanzi_gobabis_pfs_2026",
+      "locator": "Pre-feasibility economic assessment",
+      "confidence": "low",
+      "notes": "Equivalent to 0.0032 USD/kWh. ESMAP proposes LCOT as a reference for wheeling where a regulated tariff is missing or unreliable. Compute LCOT and compare once the LCOT method is implemented.",
+      "added": "2026-07-15",
+      "review_by": "2027-07-15",
+      "superseded_by": null
+    }
+  ],
+  "adjustments": [
+    {
+      "id": "ADJ-CIRCUIT-SINGLE",
+      "applies_to": "line_capex_per_km",
+      "condition": "circuits == single, relative to double",
+      "factor_low": 0.67,
+      "factor_high": 0.67,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Base Cost, citing Fichtner 2016",
+      "notes": "A single circuit line is about 33 percent cheaper than a comparable double circuit line, from reduced conductors, insulators and lighter structures."
+    },
+    {
+      "id": "ADJ-LEN-SHORT",
+      "applies_to": "line_capex_per_km",
+      "condition": "length_km < 5",
+      "factor_low": 1.5,
+      "factor_high": 1.5,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Base Cost, line length",
+      "notes": "Premium against a base cost set for a 25 to 50 km line."
+    },
+    {
+      "id": "ADJ-LEN-LONG",
+      "applies_to": "line_capex_per_km",
+      "condition": "length_km > 100",
+      "factor_low": 0.9,
+      "factor_high": 0.9,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Base Cost, line length",
+      "notes": "Discount against a base cost set for a 25 to 50 km line. Applies to all three Bulambuli options."
+    },
+    {
+      "id": "ADJ-SUPPORT-MONOPOLE",
+      "applies_to": "line_capex_per_km",
+      "condition": "support == steel_monopole, relative to vertical steel lattice",
+      "factor_low": 1.45,
+      "factor_high": 1.45,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Configuration, line support",
+      "notes": "Directly relevant to the open lattice-versus-monopole decision."
+    },
+    {
+      "id": "ADJ-SUPPORT-CONCRETE-PORTAL",
+      "applies_to": "line_capex_per_km",
+      "condition": "support == concrete_portal, relative to vertical steel lattice",
+      "factor_low": 0.8,
+      "factor_high": 0.8,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Configuration, line support",
+      "notes": ""
+    },
+    {
+      "id": "ADJ-TERRAIN-MOUNTAIN",
+      "applies_to": "land_and_line_capex",
+      "condition": "terrain == mountainous",
+      "factor_low": 1.15,
+      "factor_high": 1.15,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Configuration, land costs",
+      "notes": "Applies to the Mt. Elgon foothills section from Bulambuli toward Namalu."
+    },
+    {
+      "id": "ADJ-TERRAIN-HIGH-SLOPE",
+      "applies_to": "land_and_line_capex",
+      "condition": "terrain == high_slope",
+      "factor_low": 1.15,
+      "factor_high": 1.78,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Configuration, land costs",
+      "notes": "Up to plus 78 percent on high slopes. The upper end is why a flat per-km rate across a mixed-terrain corridor is a structural weakness."
+    },
+    {
+      "id": "ADJ-ACCESS-DIFFICULT",
+      "applies_to": "land_and_line_capex",
+      "condition": "access == difficult",
+      "factor_low": 1.1,
+      "factor_high": 1.1,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Configuration, land costs",
+      "notes": ""
+    },
+    {
+      "id": "ADJ-ALTITUDE-HIGH",
+      "applies_to": "land_and_line_capex",
+      "condition": "altitude_m > 2500",
+      "factor_low": 1.12,
+      "factor_high": 1.12,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Configuration, land costs",
+      "notes": ""
+    },
+    {
+      "id": "ADJ-STRAIGHTNESS",
+      "applies_to": "line_capex_per_km",
+      "condition": "route deviates from straight",
+      "factor_low": 1.0,
+      "factor_high": 1.14,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Location, physical constraints",
+      "notes": "Straightness can affect cost by about 14 percent."
+    },
+    {
+      "id": "ADJ-FOUND-SOFT-SOIL",
+      "applies_to": "line_capex_per_km",
+      "condition": "foundation == soft_soil",
+      "factor_low": 1.07,
+      "factor_high": 1.07,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Location",
+      "notes": "Foundations can be up to 18 percent of project cost."
+    },
+    {
+      "id": "ADJ-FOUND-PILED",
+      "applies_to": "line_capex_per_km",
+      "condition": "foundation == piled",
+      "factor_low": 1.35,
+      "factor_high": 1.35,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Line Location",
+      "notes": "Cannot be applied before geotechnical results exist. Blocks rather than assumes."
+    },
+    {
+      "id": "ADJ-HVDC-PARITY",
+      "applies_to": "technology_choice",
+      "condition": "length_km vs 483",
+      "factor_low": 483.0,
+      "factor_high": 483.0,
+      "source_id": "esmap2026",
+      "locator": "Section 2.3, Base Cost, HVAC vs HVDC, citing De Santis 2021",
+      "notes": "Not a cost multiplier. A decision threshold: HVAC and HVDC reach cost parity at about 483 km on a cost per km per MW basis. Below it HVAC is generally cheaper. Independently supports the Ghanzi-Gobabis HVAC choice at 288 km and the Bulambuli HVAC choice at 152 km."
+    }
+  ],
+  "reference_tables": {
+    "aace": [
+      {
+        "class": "Class 5",
+        "usage": "Concept screening",
+        "definition_low_pct": 0,
+        "definition_high_pct": 2,
+        "accuracy_low_pct": -50,
+        "accuracy_high_pct": 100,
+        "stage": "Pre-feasibility"
+      },
+      {
+        "class": "Class 4",
+        "usage": "Study or feasibility",
+        "definition_low_pct": 1,
+        "definition_high_pct": 15,
+        "accuracy_low_pct": -30,
+        "accuracy_high_pct": 50,
+        "stage": "Feasibility"
+      },
+      {
+        "class": "Class 3",
+        "usage": "Budget authorisation",
+        "definition_low_pct": 10,
+        "definition_high_pct": 40,
+        "accuracy_low_pct": -20,
+        "accuracy_high_pct": 30,
+        "stage": "Post-FS"
+      },
+      {
+        "class": "Class 2",
+        "usage": "Control or tender",
+        "definition_low_pct": 30,
+        "definition_high_pct": 75,
+        "accuracy_low_pct": -15,
+        "accuracy_high_pct": 20,
+        "stage": "Tender"
+      },
+      {
+        "class": "Class 1",
+        "usage": "Check estimate",
+        "definition_low_pct": 65,
+        "definition_high_pct": 100,
+        "accuracy_low_pct": -10,
+        "accuracy_high_pct": 15,
+        "stage": "Execution"
+      }
+    ]
+  }
+}

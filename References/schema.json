@@ -1,0 +1,173 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AfCEN Benchmark Library",
+  "type": "object",
+  "required": ["meta", "sources", "escalation", "market_adjustments", "benchmarks", "adjustments", "reference_tables"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["schema_version", "library_version", "updated", "owner", "status"],
+      "properties": {
+        "schema_version": {"type": "string"},
+        "library_version": {"type": "string"},
+        "updated": {"type": "string", "format": "date"},
+        "owner": {"type": "string"},
+        "status": {"enum": ["starter", "provisional", "production"]},
+        "notes": {"type": "string"}
+      }
+    },
+    "sources": {
+      "type": "object",
+      "description": "Source register per FR-13. Keyed by source_id.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["publisher", "title", "year", "tier", "primary", "licence", "locator_required"],
+        "properties": {
+          "publisher": {"type": "string"},
+          "title": {"type": "string"},
+          "year": {"type": "integer"},
+          "url": {"type": "string"},
+          "tier": {"type": "integer", "minimum": 1, "maximum": 3},
+          "primary": {"type": "boolean", "description": "false means the value was read from a secondary source citing this one"},
+          "licence": {"type": "string"},
+          "licence_confirmed": {"type": "boolean"},
+          "coverage": {"type": "string"},
+          "locator_required": {"type": "boolean"}
+        }
+      }
+    },
+    "escalation": {
+      "type": "object",
+      "required": ["indices"],
+      "properties": {
+        "indices": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["name", "status", "factors"],
+            "properties": {
+              "name": {"type": "string"},
+              "status": {"enum": ["placeholder", "confirmed"]},
+              "source": {"type": "string"},
+              "factors": {"type": "object", "description": "year -> index value, base 100"}
+            }
+          }
+        }
+      }
+    },
+    "market_adjustments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "from_market", "to_market", "divisor_low", "divisor_high", "source_id", "locator"],
+        "properties": {
+          "id": {"type": "string"},
+          "from_market": {"type": "string"},
+          "to_market": {"type": "string"},
+          "divisor_low": {"type": "number"},
+          "divisor_high": {"type": "number"},
+          "source_id": {"type": "string"},
+          "locator": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "benchmarks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "metric", "value", "basis", "geography", "source_id", "locator", "confidence", "added"],
+        "properties": {
+          "id": {"type": "string"},
+          "metric": {"type": "string"},
+          "asset": {
+            "type": "object",
+            "properties": {
+              "voltage_kv_min": {"type": "number"},
+              "voltage_kv_max": {"type": "number"},
+              "circuits": {"enum": ["single", "double", "n/a"]},
+              "technology": {"enum": ["HVAC", "HVDC", "n/a"]},
+              "conductor": {"type": "string"}
+            }
+          },
+          "value": {
+            "type": "object",
+            "required": ["low", "high", "unit", "n"],
+            "properties": {
+              "low": {"type": "number"},
+              "high": {"type": "number"},
+              "unit": {"type": "string"},
+              "n": {"type": "integer", "minimum": 1},
+              "central": {"type": ["number", "null"]}
+            }
+          },
+          "basis": {
+            "type": "object",
+            "required": ["price_year", "currency", "scope", "market", "kind"],
+            "properties": {
+              "price_year": {"type": ["integer", "null"]},
+              "currency": {"type": "string"},
+              "scope": {"type": "string", "description": "what the figure includes. FR-15."},
+              "market": {"enum": ["developed", "developing", "unspecified"]},
+              "kind": {"enum": ["estimate", "outturn", "mixed", "convention"]}
+            }
+          },
+          "geography": {
+            "type": "object",
+            "required": ["region"],
+            "properties": {
+              "region": {"type": "string"},
+              "countries": {"type": "array", "items": {"type": "string"}}
+            }
+          },
+          "source_id": {"type": "string"},
+          "locator": {"type": "string", "minLength": 1},
+          "confidence": {"enum": ["low", "medium", "high"]},
+          "notes": {"type": "string"},
+          "added": {"type": "string"},
+          "review_by": {"type": "string"},
+          "superseded_by": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "adjustments": {
+      "type": "array",
+      "description": "Cost driver factors per FR-17.",
+      "items": {
+        "type": "object",
+        "required": ["id", "applies_to", "condition", "factor_low", "factor_high", "source_id", "locator"],
+        "properties": {
+          "id": {"type": "string"},
+          "applies_to": {"type": "string"},
+          "condition": {"type": "string"},
+          "factor_low": {"type": "number"},
+          "factor_high": {"type": "number"},
+          "source_id": {"type": "string"},
+          "locator": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "reference_tables": {
+      "type": "object",
+      "properties": {
+        "aace": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["class", "usage", "definition_low_pct", "definition_high_pct", "accuracy_low_pct", "accuracy_high_pct"],
+            "properties": {
+              "class": {"type": "string"},
+              "usage": {"type": "string"},
+              "definition_low_pct": {"type": "number"},
+              "definition_high_pct": {"type": "number"},
+              "accuracy_low_pct": {"type": "number"},
+              "accuracy_high_pct": {"type": "number"},
+              "stage": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  }
+}
