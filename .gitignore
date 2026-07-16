@@ -7,4 +7,6 @@ backend/uploads/*
 node_modules/
 .next/
 frontend/.next/
+frontend/tsconfig.tsbuildinfo
 .DS_Store
+*.tsbuildinfo
