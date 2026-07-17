@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FileCheck, Shield, Code, Briefcase, TrendingUp, ArrowRight } from "lucide-react";
-import { useRole } from "./layout";
+import { useRole } from "@/components/client-shell";
 
 const ROLES = [
   { key: "afcen_lead", label: "AfCEN Lead", description: "Full platform access — review deliverables, manage flags, publish documents", icon: Shield, color: "#ff8c00" },

@@ -16,7 +16,7 @@ import {
   Vault,
 } from "lucide-react";
 import { api, type Project, type DashboardStats, type IntelligenceSummary } from "@/lib/api";
-import { useRole } from "../layout";
+import { useRole } from "@/components/client-shell";
 
 const PASS_STATUS = {
   passed: { label: "Passed", color: "#22c55e", bg: "rgba(34,197,94,0.08)" },
@@ -41,8 +41,9 @@ export default function DashboardPage() {
         setStats(s);
         if (p.length > 0) {
           try {
-            const intel = await api.intelligence.summary(p[0].id);
-            setIntelligence(intel);
+            const results = await Promise.all(p.map(proj => api.intelligence.summary(proj.id).catch(() => null)));
+            const best = results.filter(Boolean).sort((a, b) => (b!.summary.total_open + b!.stages.length) - (a!.summary.total_open + a!.stages.length))[0];
+            if (best) setIntelligence(best);
           } catch {}
         }
       })

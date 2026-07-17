@@ -5,14 +5,14 @@ import { CheckCircle2, AlertTriangle } from "lucide-react";
 import { api } from "@/lib/api";
 
 interface BenchmarkEntry {
+  id: string;
   metric: string;
-  value: number;
-  unit: string;
-  source: string;
-  voltage?: number;
-  circuits?: string;
-  price_year?: number;
-  region?: string;
+  asset: { voltage_kv_min?: number; voltage_kv_max?: number; circuits?: string; technology?: string };
+  value: { low: number; high: number; unit: string; n: number; central: number };
+  basis: { price_year?: number; currency?: string; scope?: string; market?: string; kind?: string };
+  geography: { region?: string; countries?: string[] };
+  source_id: string;
+  confidence: string;
   notes?: string;
 }
 
@@ -70,12 +70,14 @@ export default function BenchmarksPage() {
               <thead>
                 <tr className="border-b border-white/6 text-[#ff8c00]">
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Metric</th>
-                  <th className="text-right px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Value</th>
+                  <th className="text-right px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Central</th>
+                  <th className="text-right px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Range</th>
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Unit</th>
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Source</th>
                   <th className="text-center px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">kV</th>
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Circuits</th>
                   <th className="text-center px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Year</th>
+                  <th className="text-center px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Conf.</th>
                 </tr>
               </thead>
               <tbody>
@@ -84,20 +86,30 @@ export default function BenchmarksPage() {
                     key={i}
                     className="border-b border-white/[0.03] hover:bg-[#ff8c00]/[0.03] transition-colors"
                   >
-                    <td className="px-3 py-2 text-[#c8d0dc]">{e.metric}</td>
+                    <td className="px-3 py-2 text-[#c8d0dc]">{e.metric?.replace(/_/g, " ")}</td>
                     <td className="px-3 py-2 text-right text-[#ff8c00] tabular-nums">
-                      {typeof e.value === "number" ? e.value.toFixed(4) : e.value}
+                      {e.value?.central?.toFixed(3)}
                     </td>
-                    <td className="px-3 py-2 text-[#64748b]">{e.unit}</td>
-                    <td className="px-3 py-2 text-[#64748b]">{e.source}</td>
+                    <td className="px-3 py-2 text-right text-[#64748b] tabular-nums">
+                      {e.value?.low === e.value?.high ? "—" : `${e.value?.low?.toFixed(3)}–${e.value?.high?.toFixed(3)}`}
+                    </td>
+                    <td className="px-3 py-2 text-[#64748b]">{e.value?.unit?.replace(/_/g, " ")}</td>
+                    <td className="px-3 py-2 text-[#64748b]">{e.source_id}</td>
                     <td className="px-3 py-2 text-center text-[#64748b]">
-                      {e.voltage || "—"}
+                      {e.asset?.voltage_kv_min ? `${e.asset.voltage_kv_min}–${e.asset.voltage_kv_max}` : "—"}
                     </td>
                     <td className="px-3 py-2 text-[#64748b]">
-                      {e.circuits || "—"}
+                      {e.asset?.circuits || "—"}
                     </td>
                     <td className="px-3 py-2 text-center text-[#64748b]">
-                      {e.price_year || "—"}
+                      {e.basis?.price_year || "—"}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded mono ${
+                        e.confidence === "high" ? "text-[#22c55e] bg-[#22c55e]/8" :
+                        e.confidence === "medium" ? "text-[#fbbf24] bg-[#fbbf24]/8" :
+                        "text-[#64748b] bg-white/5"
+                      }`}>{e.confidence}</span>
                     </td>
                   </tr>
                 ))}
