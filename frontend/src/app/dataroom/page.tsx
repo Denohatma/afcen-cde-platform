@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Vault, FileText, Download, Eye, ExternalLink } from "lucide-react";
+import { Vault, FileText, Download, Eye } from "lucide-react";
 import { api, type Project, type DataRoom } from "@/lib/api";
 
 export default function DataRoomPage() {
