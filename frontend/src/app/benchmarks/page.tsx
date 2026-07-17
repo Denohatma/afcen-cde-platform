@@ -64,7 +64,7 @@ export default function BenchmarksPage() {
           Loading library...
         </div>
       ) : (
-        <div className="glass rounded-xl overflow-hidden">
+        <div className="glass-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-[11px]">
               <thead>

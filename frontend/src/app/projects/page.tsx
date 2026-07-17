@@ -52,7 +52,7 @@ export default function ProjectsPage() {
             <Link
               key={p.id}
               href={`/projects/${p.id}`}
-              className="block glass rounded-xl p-4 hover:border-[#ff8c00]/20 transition-all group"
+              className="block glass-card p-4 transition-all group"
             >
               <div className="flex items-start justify-between">
                 <div className="min-w-0">

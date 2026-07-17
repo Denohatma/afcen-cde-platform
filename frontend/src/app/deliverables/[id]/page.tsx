@@ -157,7 +157,7 @@ export default function DeliverableReviewPage({
   const resolvedGroups = groupFlags(resolvedFlags);
 
   return (
-    <div className="h-[calc(100vh-2.75rem)] flex flex-col">
+    <div className="h-[calc(100vh-3rem)] flex flex-col">
       {/* Header */}
       <div className="glass-elevated flex items-center justify-between px-5 py-2.5 z-10">
         <div className="flex items-center gap-3">
@@ -200,7 +200,7 @@ export default function DeliverableReviewPage({
         {/* Left: Document */}
         <div className="w-1/2 border-r border-white/[0.04] overflow-y-auto">
           <div className="p-4 space-y-3">
-            <div className="glass rounded-xl overflow-hidden">
+            <div className="glass-card overflow-hidden">
               {latestVersion && latestVersion.file_name.endsWith(".pdf") ? (
                 <embed
                   src={api.deliverables.fileUrl(latestVersion.id)}
@@ -230,7 +230,7 @@ export default function DeliverableReviewPage({
             </button>
 
             {latestVersion && (
-              <div className="glass rounded-xl p-4">
+              <div className="glass-card p-4">
                 <h3 className="text-[10px] font-semibold text-[#ff8c00] uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
                   <User className="h-3 w-3" /> Submission Details
                 </h3>
@@ -257,7 +257,7 @@ export default function DeliverableReviewPage({
             )}
 
             {versions.length > 1 && (
-              <div className="glass rounded-xl p-4">
+              <div className="glass-card p-4">
                 <h3 className="text-[10px] font-semibold text-[#64748b] uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
                   <History className="h-3 w-3" /> Version History
                 </h3>
@@ -306,7 +306,7 @@ export default function DeliverableReviewPage({
                 {openGroups.map((group) => {
                   const isExpanded = expandedGroups.has(group.key);
                   return (
-                    <div key={group.key} className="glass rounded-xl overflow-hidden">
+                    <div key={group.key} className="glass-card overflow-hidden">
                       <button onClick={() => toggleGroup(group.key)} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors">
                         <span style={{ color: group.color }}>{group.icon}</span>
                         <span className="text-[11px] font-semibold text-white uppercase tracking-[0.12em] flex-1 text-left">{group.label}</span>

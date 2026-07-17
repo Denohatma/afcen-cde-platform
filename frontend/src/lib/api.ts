@@ -80,6 +80,70 @@ export interface Extraction {
   created_at: string;
 }
 
+export interface IntelligenceSummary {
+  project_id: string;
+  project_name: string;
+  overall_status: string;
+  stages: StageInfo[];
+  summary: {
+    total_deliverables: number;
+    published: number;
+    under_review: number;
+    in_progress: number;
+    total_flags: { blocking: number; material: number; advisory: number };
+    total_open: number;
+    total_resolved: number;
+  };
+}
+
+export interface StageInfo {
+  deliverable_id: string;
+  code: string;
+  title: string;
+  state: string;
+  pass_status: string;
+  flags: { blocking: number; material: number; advisory: number };
+  open_count: number;
+  resolved_count: number;
+  due_date: string | null;
+}
+
+export interface DataRoom {
+  project_id: string;
+  project_name: string;
+  documents: DataRoomDoc[];
+  total: number;
+}
+
+export interface DataRoomDoc {
+  deliverable_id: string;
+  code: string;
+  title: string;
+  state: string;
+  version: number;
+  file_name: string | null;
+  file_type: string | null;
+  version_id: string | null;
+  published_at: string | null;
+}
+
+export interface AuditEntry {
+  id: string;
+  entity_type: string;
+  entity_id: string;
+  action: string;
+  actor: string;
+  details: Record<string, unknown> | null;
+  created_at: string;
+}
+
+export interface RoleInfo {
+  key: string;
+  label: string;
+  description: string;
+  permissions: string[];
+}
+
 export const api = {
   dashboard: {
     stats: () => request<DashboardStats>("/dashboard/stats"),
@@ -142,6 +206,18 @@ export const api = {
   versions: {
     list: (deliverableId: string) =>
       request<Version[]>(`/deliverables/${deliverableId}/versions`),
+  },
+  auth: {
+    roles: () => request<RoleInfo[]>("/auth/roles"),
+  },
+  intelligence: {
+    summary: (projectId: string) => request<IntelligenceSummary>(`/projects/${projectId}/intelligence`),
+  },
+  dataroom: {
+    get: (projectId: string) => request<DataRoom>(`/projects/${projectId}/dataroom`),
+  },
+  audit: {
+    list: (projectId: string) => request<AuditEntry[]>(`/projects/${projectId}/audit`),
   },
   benchmarks: {
     validate: () => request<Record<string, unknown>>("/benchmarks/validate"),

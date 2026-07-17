@@ -1,216 +1,90 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import {
-  FileCheck,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  FolderOpen,
-  ArrowRight,
-  Shield,
-  BarChart3,
-} from "lucide-react";
-import { api, type Project, type DashboardStats } from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { FileCheck, Shield, Code, Briefcase, TrendingUp, ArrowRight } from "lucide-react";
+import { useRole } from "./layout";
 
-export default function DashboardPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [stats, setStats] = useState<DashboardStats>({ projects: 0, pending_review: 0, open_flags: 0, published: 0 });
-  const [loading, setLoading] = useState(true);
+const ROLES = [
+  { key: "afcen_lead", label: "AfCEN Lead", description: "Full platform access — review deliverables, manage flags, publish documents", icon: Shield, color: "#ff8c00" },
+  { key: "consultant", label: "Consultant", description: "Upload deliverables, respond to review flags, track submission status", icon: Briefcase, color: "#38bdf8" },
+  { key: "developer", label: "Developer", description: "Create projects, upload feasibility studies, monitor progress", icon: Code, color: "#22c55e" },
+  { key: "investor", label: "Investor", description: "Read-only access to data room and published deliverables", icon: TrendingUp, color: "#a78bfa" },
+];
+
+export default function RoleSelectorPage() {
+  const { role, setRole } = useRole();
+  const router = useRouter();
+  const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([api.projects.list(), api.dashboard.stats()])
-      .then(([p, s]) => { setProjects(p); setStats(s); })
-      .catch(() => setProjects([]))
-      .finally(() => setLoading(false));
-  }, []);
+    if (role) router.replace("/dashboard");
+  }, [role, router]);
+
+  const handleSelect = (key: string) => {
+    setSelected(key);
+    setTimeout(() => {
+      setRole(key as "developer" | "consultant" | "afcen_lead" | "investor");
+      router.push("/dashboard");
+    }, 200);
+  };
+
+  if (role) return null;
 
   return (
-    <div className="mx-auto max-w-[1400px] px-5 py-6">
-      <div className="mb-8">
-        <h1 className="text-xl font-semibold text-white tracking-tight mb-1">
-          Common Data Environment
-        </h1>
-        <p className="text-xs text-[#64748b] uppercase tracking-[0.15em]">
-          Bulambuli-Moroto 132 kV IPT &mdash; Feasibility Study Review
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-2xl">
+        <div className="text-center mb-12 animate-in">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-[#ff8c00]/10 border border-[#ff8c00]/15">
+              <FileCheck className="h-6 w-6 text-[#ff8c00]" />
+            </div>
+          </div>
+          <h1 className="text-2xl font-semibold text-white tracking-tight mb-2">
+            AfCEN Common Data Environment
+          </h1>
+          <p className="text-sm text-[#64748b]">
+            Select your role to continue
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {ROLES.map((r, i) => {
+            const Icon = r.icon;
+            const isSelected = selected === r.key;
+            return (
+              <button
+                key={r.key}
+                onClick={() => handleSelect(r.key)}
+                className="glass-card p-5 text-left group animate-in"
+                style={{ animationDelay: `${i * 60}ms`, borderColor: isSelected ? `${r.color}40` : undefined }}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div
+                    className="flex items-center justify-center w-9 h-9 rounded-xl transition-colors"
+                    style={{ backgroundColor: `${r.color}10`, border: `1px solid ${r.color}15` }}
+                  >
+                    <Icon className="h-4 w-4" style={{ color: r.color }} />
+                  </div>
+                  <ArrowRight
+                    className="h-4 w-4 text-[#334155] group-hover:text-[#64748b] transition-all group-hover:translate-x-0.5"
+                  />
+                </div>
+                <h3 className="text-[13px] font-medium text-white mb-1">
+                  {r.label}
+                </h3>
+                <p className="text-[11px] text-[#64748b] leading-relaxed">
+                  {r.description}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+
+        <p className="text-center text-[10px] text-[#334155] mt-8">
+          Bulambuli-Moroto 132 kV IPT — Feasibility Study Review Platform
         </p>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-8">
-        <StatCard
-          icon={<FolderOpen className="h-3.5 w-3.5" />}
-          label="Active Projects"
-          value={stats.projects}
-          color="#ff8c00"
-        />
-        <StatCard
-          icon={<Clock className="h-3.5 w-3.5" />}
-          label="Pending Review"
-          value={stats.pending_review}
-          color="#fbbf24"
-        />
-        <StatCard
-          icon={<AlertTriangle className="h-3.5 w-3.5" />}
-          label="Open Flags"
-          value={stats.open_flags}
-          color="#ef4444"
-        />
-        <StatCard
-          icon={<CheckCircle2 className="h-3.5 w-3.5" />}
-          label="Published"
-          value={stats.published}
-          color="#22c55e"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 glass rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-[11px] font-semibold text-[#ff8c00] uppercase tracking-[0.15em]">
-              Projects
-            </h2>
-            <Link
-              href="/projects"
-              className="text-[10px] text-[#64748b] hover:text-[#ff8c00] flex items-center gap-1 uppercase tracking-wider transition-colors"
-            >
-              View all <ArrowRight className="h-3 w-3" />
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="text-center py-8 text-[#64748b] text-xs">
-              Loading...
-            </div>
-          ) : projects.length === 0 ? (
-            <div className="text-center py-8">
-              <FolderOpen className="h-7 w-7 text-[#1e293b] mx-auto mb-2" />
-              <p className="text-xs text-[#64748b]">No projects yet</p>
-              <p className="text-[10px] text-[#475569] mt-1">
-                Backend may not be running on port 8001
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {projects.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/projects/${p.id}`}
-                  className="block glass-subtle rounded-lg p-3.5 hover:border-[#ff8c00]/20 transition-all group"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-sm font-medium text-white group-hover:text-[#ff8c00] transition-colors">
-                        {p.name}
-                      </span>
-                      <p className="text-[11px] text-[#64748b] mt-0.5">
-                        {p.description}
-                      </p>
-                    </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-[#334155] group-hover:text-[#ff8c00] transition-colors" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-4">
-          <div className="glass rounded-xl p-5">
-            <h2 className="text-[11px] font-semibold text-[#ff8c00] uppercase tracking-[0.15em] mb-3">
-              Platform Checks
-            </h2>
-            <div className="space-y-2.5">
-              <CheckRow
-                icon={<Shield className="h-3 w-3 text-[#ff8c00]" />}
-                label="Universal checks"
-                detail="U-1 to U-10"
-              />
-              <CheckRow
-                icon={<BarChart3 className="h-3 w-3 text-[#fbbf24]" />}
-                label="Benchmark checks"
-                detail="FR-14 to FR-18"
-              />
-              <CheckRow
-                icon={<FileCheck className="h-3 w-3 text-[#22c55e]" />}
-                label="AACE verification"
-                detail="FR-24"
-              />
-            </div>
-          </div>
-
-          <div className="glass rounded-xl p-5">
-            <h2 className="text-[11px] font-semibold text-[#ff8c00] uppercase tracking-[0.15em] mb-3">
-              Document Lifecycle
-            </h2>
-            <div className="flex items-center gap-2 text-[10px]">
-              <span className="px-2 py-1 rounded-md bg-white/5 text-[#94a3b8] border border-white/5">
-                WIP
-              </span>
-              <ArrowRight className="h-3 w-3 text-[#334155]" />
-              <span className="px-2 py-1 rounded-md bg-[#ff8c00]/8 text-[#ff8c00] border border-[#ff8c00]/15">
-                Shared
-              </span>
-              <ArrowRight className="h-3 w-3 text-[#334155]" />
-              <span className="px-2 py-1 rounded-md bg-[#22c55e]/8 text-[#22c55e] border border-[#22c55e]/15">
-                Published
-              </span>
-            </div>
-            <p className="text-[10px] text-[#475569] mt-2.5">
-              Automated checks fire on WIP &rarr; Shared transition
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function StatCard({
-  icon,
-  label,
-  value,
-  color,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-  color: string;
-}) {
-  return (
-    <div className="glass rounded-xl p-4">
-      <div className="flex items-center gap-2 mb-2">
-        <span style={{ color }}>{icon}</span>
-        <span className="text-[10px] text-[#64748b] uppercase tracking-[0.15em]">
-          {label}
-        </span>
-      </div>
-      <span
-        className="text-2xl font-bold bloomberg-glow"
-        style={{ color }}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
-
-function CheckRow({
-  icon,
-  label,
-  detail,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  detail: string;
-}) {
-  return (
-    <div className="flex items-center justify-between py-1">
-      <div className="flex items-center gap-2">
-        {icon}
-        <span className="text-[11px] text-[#c8d0dc]">{label}</span>
-      </div>
-      <span className="text-[10px] text-[#475569]">{detail}</span>
     </div>
   );
 }

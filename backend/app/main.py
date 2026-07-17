@@ -31,7 +31,7 @@ async def health():
     return {"status": "ok", "service": "AfCEN CDE"}
 
 
-from .routers import projects, deliverables, benchmarks, flags, extractions, export  # noqa: E402
+from .routers import projects, deliverables, benchmarks, flags, extractions, export, auth  # noqa: E402
 
 app.include_router(projects.router, prefix="/api")
 app.include_router(deliverables.router, prefix="/api")
@@ -39,3 +39,4 @@ app.include_router(benchmarks.router, prefix="/api")
 app.include_router(flags.router, prefix="/api")
 app.include_router(extractions.router, prefix="/api")
 app.include_router(export.router, prefix="/api")
+app.include_router(auth.router, prefix="/api")

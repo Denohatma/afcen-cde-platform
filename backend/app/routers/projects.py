@@ -57,3 +57,147 @@ async def get_project(project_id: str, db: AsyncSession = Depends(get_db)):
     if not project:
         raise HTTPException(404, "Project not found")
     return schemas.ProjectResponse.model_validate(project)
+
+
+@router.get("/projects/{project_id}/dataroom")
+async def get_dataroom(project_id: str, db: AsyncSession = Depends(get_db)):
+    project = await db.get(models.Project, project_id)
+    if not project:
+        raise HTTPException(404, "Project not found")
+
+    result = await db.execute(
+        select(models.Deliverable)
+        .where(models.Deliverable.project_id == project_id)
+        .where(models.Deliverable.state == "published")
+        .order_by(models.Deliverable.code)
+    )
+    published = result.scalars().all()
+
+    documents = []
+    for d in published:
+        vers_result = await db.execute(
+            select(models.Version)
+            .where(models.Version.deliverable_id == d.id)
+            .order_by(models.Version.version_number.desc())
+            .limit(1)
+        )
+        latest = vers_result.scalar_one_or_none()
+        documents.append({
+            "deliverable_id": d.id,
+            "code": d.code,
+            "title": d.title,
+            "state": d.state,
+            "version": latest.version_number if latest else 0,
+            "file_name": latest.file_name if latest else None,
+            "file_type": latest.file_type if latest else None,
+            "version_id": latest.id if latest else None,
+            "published_at": d.updated_at.isoformat() if d.updated_at else None,
+        })
+
+    return {
+        "project_id": project_id,
+        "project_name": project.name,
+        "documents": documents,
+        "total": len(documents),
+    }
+
+
+@router.get("/projects/{project_id}/intelligence")
+async def get_intelligence_summary(project_id: str, db: AsyncSession = Depends(get_db)):
+    project = await db.get(models.Project, project_id)
+    if not project:
+        raise HTTPException(404, "Project not found")
+
+    deliverables_result = await db.execute(
+        select(models.Deliverable)
+        .where(models.Deliverable.project_id == project_id)
+        .order_by(models.Deliverable.code)
+    )
+    deliverables = deliverables_result.scalars().all()
+
+    stages = []
+    total_flags = {"blocking": 0, "material": 0, "advisory": 0}
+    total_resolved = 0
+    total_open = 0
+
+    for d in deliverables:
+        flags_result = await db.execute(
+            select(models.Flag).where(models.Flag.deliverable_id == d.id)
+        )
+        d_flags = flags_result.scalars().all()
+
+        open_flags = [f for f in d_flags if f.status == "open"]
+        resolved_flags = [f for f in d_flags if f.status != "open"]
+        blocking = len([f for f in open_flags if f.severity == "blocking"])
+        material = len([f for f in open_flags if f.severity == "material"])
+        advisory = len([f for f in open_flags if f.severity == "advisory"])
+
+        total_flags["blocking"] += blocking
+        total_flags["material"] += material
+        total_flags["advisory"] += advisory
+        total_open += len(open_flags)
+        total_resolved += len(resolved_flags)
+
+        if d.state == "published":
+            pass_status = "passed"
+        elif blocking > 0:
+            pass_status = "blocked"
+        elif material > 0:
+            pass_status = "flagged"
+        elif d.state == "shared" and len(open_flags) == 0:
+            pass_status = "clear"
+        elif d.state == "shared":
+            pass_status = "review"
+        else:
+            pass_status = "pending"
+
+        stages.append({
+            "deliverable_id": d.id,
+            "code": d.code,
+            "title": d.title,
+            "state": d.state,
+            "pass_status": pass_status,
+            "flags": {"blocking": blocking, "material": material, "advisory": advisory},
+            "open_count": len(open_flags),
+            "resolved_count": len(resolved_flags),
+            "due_date": d.due_date.isoformat() if d.due_date else None,
+        })
+
+    all_clear = total_flags["blocking"] == 0 and total_flags["material"] == 0
+    overall = "pass" if all_clear and all(s["state"] in ("published", "shared") for s in stages) else "review_required"
+
+    return {
+        "project_id": project_id,
+        "project_name": project.name,
+        "overall_status": overall,
+        "stages": stages,
+        "summary": {
+            "total_deliverables": len(deliverables),
+            "published": len([d for d in deliverables if d.state == "published"]),
+            "under_review": len([d for d in deliverables if d.state == "shared"]),
+            "in_progress": len([d for d in deliverables if d.state == "wip"]),
+            "total_flags": total_flags,
+            "total_open": total_open,
+            "total_resolved": total_resolved,
+        },
+    }
+
+
+@router.get("/projects/{project_id}/audit")
+async def get_audit_log(project_id: str, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(models.AuditLog)
+        .where(models.AuditLog.project_id == project_id)
+        .order_by(models.AuditLog.created_at.desc())
+        .limit(50)
+    )
+    logs = result.scalars().all()
+    return [{
+        "id": l.id,
+        "entity_type": l.entity_type,
+        "entity_id": l.entity_id,
+        "action": l.action,
+        "actor": l.actor,
+        "details": l.details,
+        "created_at": l.created_at.isoformat() if l.created_at else None,
+    } for l in logs]

@@ -93,7 +93,7 @@ export default function ProjectDetailPage({
         </div>
 
         {deliverables.length === 0 ? (
-          <div className="glass rounded-xl p-8 text-center">
+          <div className="glass-card p-8 text-center">
             <FileText className="h-7 w-7 text-[#1e293b] mx-auto mb-2" />
             <p className="text-xs text-[#64748b]">No deliverables yet</p>
           </div>
@@ -107,7 +107,7 @@ export default function ProjectDetailPage({
                 <Link
                   key={d.id}
                   href={`/deliverables/${d.id}`}
-                  className="block glass rounded-xl p-4 hover:border-[#ff8c00]/20 transition-all group"
+                  className="block glass-card p-4 transition-all group"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 min-w-0">
