@@ -14,6 +14,8 @@ import {
   AlertCircle,
   Brain,
   Vault,
+  Bell,
+  FileText,
 } from "lucide-react";
 import { api, type Project, type DashboardStats, type IntelligenceSummary } from "@/lib/api";
 import { useRole } from "@/components/client-shell";
@@ -32,6 +34,7 @@ export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [stats, setStats] = useState<DashboardStats>({ projects: 0, pending_review: 0, open_flags: 0, published: 0 });
   const [intelligence, setIntelligence] = useState<IntelligenceSummary | null>(null);
+  const [slaAlerts, setSlaAlerts] = useState<{ overdue: number; urgent: number }>({ overdue: 0, urgent: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -44,6 +47,14 @@ export default function DashboardPage() {
             const results = await Promise.all(p.map(proj => api.intelligence.summary(proj.id).catch(() => null)));
             const best = results.filter(Boolean).sort((a, b) => (b!.summary.total_open + b!.stages.length) - (a!.summary.total_open + a!.stages.length))[0];
             if (best) setIntelligence(best);
+          } catch {}
+          try {
+            const slaResults = await Promise.all(p.map(proj => api.sla.status(proj.id).catch(() => null)));
+            const totals = slaResults.filter(Boolean).reduce(
+              (acc, r) => ({ overdue: acc.overdue + r!.summary.overdue, urgent: acc.urgent + r!.summary.urgent }),
+              { overdue: 0, urgent: 0 }
+            );
+            setSlaAlerts(totals);
           } catch {}
         }
       })
@@ -183,6 +194,32 @@ export default function DashboardPage() {
             </p>
           </div>
 
+          {(slaAlerts.overdue > 0 || slaAlerts.urgent > 0) && (
+            <Link href="/reminders" className="glass-card p-5 block group border border-[#ef4444]/10">
+              <div className="flex items-center gap-2 mb-2">
+                <Bell className="h-4 w-4 text-[#ef4444]" />
+                <h2 className="text-[12px] font-medium text-white">SLA Alerts</h2>
+              </div>
+              <div className="flex gap-3 mb-2">
+                {slaAlerts.overdue > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <AlertCircle className="h-3 w-3 text-[#ef4444]" />
+                    <span className="text-[11px] text-[#ef4444] tabular-nums">{slaAlerts.overdue} overdue</span>
+                  </div>
+                )}
+                {slaAlerts.urgent > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <AlertTriangle className="h-3 w-3 text-[#ff8c00]" />
+                    <span className="text-[11px] text-[#ff8c00] tabular-nums">{slaAlerts.urgent} urgent</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-1 text-[10px] text-[#475569] group-hover:text-[#ef4444] transition-colors">
+                View reminders <ArrowRight className="h-3 w-3" />
+              </div>
+            </Link>
+          )}
+
           {hasPermission("dataroom.read") && (
             <Link href="/dataroom" className="glass-card p-5 block group">
               <div className="flex items-center gap-2 mb-2">
@@ -197,6 +234,19 @@ export default function DashboardPage() {
               </div>
             </Link>
           )}
+
+          <Link href="/reminders" className="glass-card p-5 block group">
+            <div className="flex items-center gap-2 mb-2">
+              <FileText className="h-4 w-4 text-[#38bdf8]" />
+              <h2 className="text-[12px] font-medium text-white">Document Repository</h2>
+            </div>
+            <p className="text-[10px] text-[#475569]">
+              Track deliverable deadlines and send SLA reminders
+            </p>
+            <div className="flex items-center gap-1 text-[10px] text-[#475569] group-hover:text-[#38bdf8] mt-2 transition-colors">
+              Manage deadlines <ArrowRight className="h-3 w-3" />
+            </div>
+          </Link>
         </div>
       </div>
     </div>

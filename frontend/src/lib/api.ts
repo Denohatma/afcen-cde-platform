@@ -219,6 +219,29 @@ export const api = {
   audit: {
     list: (projectId: string) => request<AuditEntry[]>(`/projects/${projectId}/audit`),
   },
+  sla: {
+    status: (projectId: string) =>
+      request<{
+        deliverables: Array<{
+          id: string;
+          code: string;
+          title: string;
+          state: string;
+          due_date: string | null;
+          days_remaining: number | null;
+          sla_status: string;
+          needs_reminder: boolean;
+        }>;
+        summary: { overdue: number; urgent: number; warning: number; on_track: number; no_deadline: number };
+      }>(`/projects/${projectId}/sla-status`),
+  },
+  reminders: {
+    send: (data: { deliverable_id: string; recipient_email: string; message: string }) =>
+      request<{ status: string; deliverable_id: string; recipient: string }>("/reminders/send", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+  },
   benchmarks: {
     validate: () => request<Record<string, unknown>>("/benchmarks/validate"),
     sources: () => request<Record<string, unknown>>("/benchmarks/sources"),

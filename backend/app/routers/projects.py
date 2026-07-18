@@ -1,9 +1,17 @@
 from __future__ import annotations
+from datetime import date
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from ..database import get_db
 from .. import models, schemas
+
+
+class ReminderRequest(BaseModel):
+    deliverable_id: str
+    recipient_email: str
+    message: str
 
 router = APIRouter(tags=["projects"])
 
@@ -201,3 +209,89 @@ async def get_audit_log(project_id: str, db: AsyncSession = Depends(get_db)):
         "details": l.details,
         "created_at": l.created_at.isoformat() if l.created_at else None,
     } for l in logs]
+
+
+@router.get("/projects/{project_id}/sla-status")
+async def get_sla_status(project_id: str, db: AsyncSession = Depends(get_db)):
+    project = await db.get(models.Project, project_id)
+    if not project:
+        raise HTTPException(404, "Project not found")
+
+    result = await db.execute(
+        select(models.Deliverable)
+        .where(models.Deliverable.project_id == project_id)
+        .order_by(models.Deliverable.code)
+    )
+    deliverables = result.scalars().all()
+
+    today = date.today()
+    items = []
+    for d in deliverables:
+        if d.due_date:
+            days_remaining = (d.due_date - today).days
+            if days_remaining < 0:
+                sla_status = "overdue"
+            elif days_remaining <= 3:
+                sla_status = "urgent"
+            elif days_remaining <= 7:
+                sla_status = "warning"
+            else:
+                sla_status = "on_track"
+        else:
+            days_remaining = None
+            sla_status = "no_deadline"
+
+        needs_reminder = sla_status in ("overdue", "urgent")
+
+        items.append({
+            "deliverable_id": d.id,
+            "code": d.code,
+            "title": d.title,
+            "state": d.state,
+            "due_date": d.due_date.isoformat() if d.due_date else None,
+            "days_remaining": days_remaining,
+            "sla_status": sla_status,
+            "needs_reminder": needs_reminder,
+        })
+
+    return {
+        "project_id": project_id,
+        "project_name": project.name,
+        "checked_at": today.isoformat(),
+        "deliverables": items,
+        "summary": {
+            "total": len(items),
+            "overdue": len([i for i in items if i["sla_status"] == "overdue"]),
+            "urgent": len([i for i in items if i["sla_status"] == "urgent"]),
+            "warning": len([i for i in items if i["sla_status"] == "warning"]),
+            "on_track": len([i for i in items if i["sla_status"] == "on_track"]),
+            "no_deadline": len([i for i in items if i["sla_status"] == "no_deadline"]),
+        },
+    }
+
+
+@router.post("/reminders/send")
+async def send_reminder(data: ReminderRequest, db: AsyncSession = Depends(get_db)):
+    deliverable = await db.get(models.Deliverable, data.deliverable_id)
+    if not deliverable:
+        raise HTTPException(404, "Deliverable not found")
+
+    audit_entry = models.AuditLog(
+        project_id=deliverable.project_id,
+        entity_type="deliverable",
+        entity_id=data.deliverable_id,
+        action="reminder_sent",
+        actor="system",
+        details={
+            "recipient_email": data.recipient_email,
+            "message": data.message,
+        },
+    )
+    db.add(audit_entry)
+    await db.commit()
+
+    return {
+        "status": "sent",
+        "deliverable_id": data.deliverable_id,
+        "recipient": data.recipient_email,
+    }

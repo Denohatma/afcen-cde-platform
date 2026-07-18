@@ -12,7 +12,10 @@ import {
   ChevronDown,
   User,
   LogOut,
+  FileText,
+  Bell,
 } from "lucide-react";
+import Chatbot from "./chatbot";
 
 type Role = "developer" | "consultant" | "afcen_lead" | "investor" | null;
 
@@ -72,6 +75,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
     { href: "/projects", label: "Projects", icon: FolderOpen, perm: "projects.read" },
     { href: "/benchmarks", label: "Benchmarks", icon: Database, perm: "benchmarks.read" },
     { href: "/dataroom", label: "Data Room", icon: Vault, perm: "dataroom.read" },
+    { href: "/reminders", label: "Reminders", icon: Bell, perm: "projects.read" },
   ];
 
   if (!mounted) return <main className="min-h-screen">{children}</main>;
@@ -154,6 +158,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
             </div>
           </nav>
           <main className="min-h-[calc(100vh-3rem)]">{children}</main>
+          <Chatbot />
         </>
       )}
     </RoleContext.Provider>
