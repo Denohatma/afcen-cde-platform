@@ -65,10 +65,10 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-6">
       <div className="mb-8">
-        <h1 className="text-xl font-semibold text-white tracking-tight mb-1">
+        <h1 className="text-xl font-semibold text-[var(--surface-text-strong)] tracking-tight mb-1">
           {role === "investor" ? "Investment Overview" : role === "consultant" ? "Submission Dashboard" : "Common Data Environment"}
         </h1>
-        <p className="text-[11px] text-[#475569]">
+        <p className="text-[11px] text-[var(--surface-text-faint)]">
           Bulambuli-Moroto 132 kV IPT — Feasibility Study Review
         </p>
       </div>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Brain className="h-4 w-4 text-[#ff8c00]" />
-                  <h2 className="text-[12px] font-medium text-white">Intelligence Review</h2>
+                  <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)]">Intelligence Review</h2>
                 </div>
                 <span className={`text-[10px] px-2.5 py-1 rounded-full mono ${
                   intelligence.overall_status === "pass"
@@ -105,10 +105,10 @@ export default function DashboardPage() {
                     <Link
                       key={stage.deliverable_id}
                       href={`/deliverables/${stage.deliverable_id}`}
-                      className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.03] transition-all group"
+                      className="flex items-center gap-3 p-3 rounded-xl bg-[var(--surface-input)] hover:bg-[var(--surface-hover)] border border-[var(--surface-border)] transition-all group"
                     >
-                      <span className="text-[10px] text-[#475569] mono w-12 shrink-0">{stage.code}</span>
-                      <span className="text-[12px] text-[#c8d0dc] flex-1 truncate group-hover:text-white transition-colors">{stage.title}</span>
+                      <span className="text-[10px] text-[var(--surface-text-faint)] mono w-12 shrink-0">{stage.code}</span>
+                      <span className="text-[12px] text-[var(--surface-text)] flex-1 truncate group-hover:text-[var(--surface-text-strong)] transition-colors">{stage.title}</span>
                       <div className="flex items-center gap-2 shrink-0">
                         {stage.flags.blocking > 0 && (
                           <span className="flex items-center gap-1 text-[10px] text-[#ef4444]">
@@ -132,7 +132,7 @@ export default function DashboardPage() {
                 })}
               </div>
 
-              <div className="flex items-center gap-4 mt-4 pt-3 border-t border-white/[0.04] text-[10px] text-[#475569] mono">
+              <div className="flex items-center gap-4 mt-4 pt-3 border-t border-[var(--surface-border)] text-[10px] text-[var(--surface-text-faint)] mono">
                 <span>Flags: <span className="text-[#ef4444]">{intelligence.summary.total_flags.blocking}B</span> / <span className="text-[#fbbf24]">{intelligence.summary.total_flags.material}M</span> / <span className="text-[#38bdf8]">{intelligence.summary.total_flags.advisory}A</span></span>
                 <span>Open: {intelligence.summary.total_open}</span>
                 <span>Resolved: {intelligence.summary.total_resolved}</span>
@@ -142,27 +142,27 @@ export default function DashboardPage() {
 
           <div className="glass-card p-5">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[12px] font-medium text-white">Projects</h2>
-              <Link href="/projects" className="text-[10px] text-[#475569] hover:text-[#ff8c00] flex items-center gap-1 transition-colors">
+              <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)]">Projects</h2>
+              <Link href="/projects" className="text-[10px] text-[var(--surface-text-faint)] hover:text-[#ff8c00] flex items-center gap-1 transition-colors">
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             {loading ? (
-              <div className="text-center py-6 text-[#475569] text-[11px]">Loading...</div>
+              <div className="text-center py-6 text-[var(--surface-text-faint)] text-[11px]">Loading...</div>
             ) : projects.length === 0 ? (
               <div className="text-center py-8">
-                <FolderOpen className="h-6 w-6 text-[#1e293b] mx-auto mb-2" />
-                <p className="text-[11px] text-[#475569]">No projects — ensure backend is running on port 8001</p>
+                <FolderOpen className="h-6 w-6 text-[var(--surface-text-dim)] mx-auto mb-2" />
+                <p className="text-[11px] text-[var(--surface-text-faint)]">No projects — ensure backend is running on port 8001</p>
               </div>
             ) : (
               <div className="space-y-2">
                 {projects.map((p) => (
-                  <Link key={p.id} href={`/projects/${p.id}`} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.03] transition-all group">
+                  <Link key={p.id} href={`/projects/${p.id}`} className="flex items-center justify-between p-3 rounded-xl bg-[var(--surface-input)] hover:bg-[var(--surface-hover)] border border-[var(--surface-border)] transition-all group">
                     <div>
-                      <span className="text-[12px] font-medium text-[#c8d0dc] group-hover:text-white transition-colors">{p.name}</span>
-                      <p className="text-[10px] text-[#475569] mt-0.5">{p.description}</p>
+                      <span className="text-[12px] font-medium text-[var(--surface-text)] group-hover:text-[var(--surface-text-strong)] transition-colors">{p.name}</span>
+                      <p className="text-[10px] text-[var(--surface-text-faint)] mt-0.5">{p.description}</p>
                     </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-[#334155] group-hover:text-[#ff8c00] transition-colors" />
+                    <ArrowRight className="h-3.5 w-3.5 text-[var(--surface-text-dim)] group-hover:text-[#ff8c00] transition-colors" />
                   </Link>
                 ))}
               </div>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
 
         <div className="space-y-4">
           <div className="glass-card p-5">
-            <h2 className="text-[12px] font-medium text-white mb-4">Platform Checks</h2>
+            <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)] mb-4">Platform Checks</h2>
             <div className="space-y-3">
               <CheckRow icon={<Shield className="h-3.5 w-3.5 text-[#ff8c00]" />} label="Universal" detail="U-1 to U-10" desc="Units, arithmetic, completeness" />
               <CheckRow icon={<BarChart3 className="h-3.5 w-3.5 text-[#38bdf8]" />} label="Benchmark" detail="FR-14 to FR-18" desc="Cost normalization, band checks" />
@@ -181,15 +181,15 @@ export default function DashboardPage() {
           </div>
 
           <div className="glass-card p-5">
-            <h2 className="text-[12px] font-medium text-white mb-4">Document Lifecycle</h2>
+            <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)] mb-4">Document Lifecycle</h2>
             <div className="flex items-center gap-2 text-[10px]">
-              <span className="px-2.5 py-1 rounded-lg bg-white/5 text-[#64748b] border border-white/5 mono">WIP</span>
-              <ArrowRight className="h-3 w-3 text-[#1e293b]" />
+              <span className="px-2.5 py-1 rounded-lg bg-[var(--surface-badge)] text-[var(--surface-text-muted)] border border-white/5 mono">WIP</span>
+              <ArrowRight className="h-3 w-3 text-[var(--surface-text-dim)]" />
               <span className="px-2.5 py-1 rounded-lg bg-[#ff8c00]/6 text-[#ff8c00] border border-[#ff8c00]/12 mono">SHARED</span>
-              <ArrowRight className="h-3 w-3 text-[#1e293b]" />
+              <ArrowRight className="h-3 w-3 text-[var(--surface-text-dim)]" />
               <span className="px-2.5 py-1 rounded-lg bg-[#22c55e]/6 text-[#22c55e] border border-[#22c55e]/12 mono">PUBLISHED</span>
             </div>
-            <p className="text-[10px] text-[#334155] mt-3">
+            <p className="text-[10px] text-[var(--surface-text-dim)] mt-3">
               Intelligence layer fires on WIP → Shared
             </p>
           </div>
@@ -198,7 +198,7 @@ export default function DashboardPage() {
             <Link href="/reminders" className="glass-card p-5 block group border border-[#ef4444]/10">
               <div className="flex items-center gap-2 mb-2">
                 <Bell className="h-4 w-4 text-[#ef4444]" />
-                <h2 className="text-[12px] font-medium text-white">SLA Alerts</h2>
+                <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)]">SLA Alerts</h2>
               </div>
               <div className="flex gap-3 mb-2">
                 {slaAlerts.overdue > 0 && (
@@ -214,7 +214,7 @@ export default function DashboardPage() {
                   </div>
                 )}
               </div>
-              <div className="flex items-center gap-1 text-[10px] text-[#475569] group-hover:text-[#ef4444] transition-colors">
+              <div className="flex items-center gap-1 text-[10px] text-[var(--surface-text-faint)] group-hover:text-[#ef4444] transition-colors">
                 View reminders <ArrowRight className="h-3 w-3" />
               </div>
             </Link>
@@ -224,12 +224,12 @@ export default function DashboardPage() {
             <Link href="/dataroom" className="glass-card p-5 block group">
               <div className="flex items-center gap-2 mb-2">
                 <Vault className="h-4 w-4 text-[#a78bfa]" />
-                <h2 className="text-[12px] font-medium text-white">Data Room</h2>
+                <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)]">Data Room</h2>
               </div>
-              <p className="text-[10px] text-[#475569]">
+              <p className="text-[10px] text-[var(--surface-text-faint)]">
                 Access published deliverables and export packages
               </p>
-              <div className="flex items-center gap-1 text-[10px] text-[#475569] group-hover:text-[#a78bfa] mt-2 transition-colors">
+              <div className="flex items-center gap-1 text-[10px] text-[var(--surface-text-faint)] group-hover:text-[#a78bfa] mt-2 transition-colors">
                 Open data room <ArrowRight className="h-3 w-3" />
               </div>
             </Link>
@@ -238,12 +238,12 @@ export default function DashboardPage() {
           <Link href="/reminders" className="glass-card p-5 block group">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="h-4 w-4 text-[#38bdf8]" />
-              <h2 className="text-[12px] font-medium text-white">Document Repository</h2>
+              <h2 className="text-[12px] font-medium text-[var(--surface-text-strong)]">Document Repository</h2>
             </div>
-            <p className="text-[10px] text-[#475569]">
+            <p className="text-[10px] text-[var(--surface-text-faint)]">
               Track deliverable deadlines and send SLA reminders
             </p>
-            <div className="flex items-center gap-1 text-[10px] text-[#475569] group-hover:text-[#38bdf8] mt-2 transition-colors">
+            <div className="flex items-center gap-1 text-[10px] text-[var(--surface-text-faint)] group-hover:text-[#38bdf8] mt-2 transition-colors">
               Manage deadlines <ArrowRight className="h-3 w-3" />
             </div>
           </Link>
@@ -258,7 +258,7 @@ function StatCard({ icon, label, value, color }: { icon: React.ReactNode; label:
     <div className="glass-card p-4">
       <div className="flex items-center gap-2 mb-2.5">
         <span style={{ color }}>{icon}</span>
-        <span className="text-[10px] text-[#475569]">{label}</span>
+        <span className="text-[10px] text-[var(--surface-text-faint)]">{label}</span>
       </div>
       <span className="text-2xl font-semibold tabular-nums" style={{ color }}>{value}</span>
     </div>
@@ -271,10 +271,10 @@ function CheckRow({ icon, label, detail, desc }: { icon: React.ReactNode; label:
       {icon}
       <div className="flex-1">
         <div className="flex items-center justify-between">
-          <span className="text-[11px] text-[#c8d0dc]">{label}</span>
-          <span className="text-[9px] text-[#334155] mono">{detail}</span>
+          <span className="text-[11px] text-[var(--surface-text)]">{label}</span>
+          <span className="text-[9px] text-[var(--surface-text-dim)] mono">{detail}</span>
         </div>
-        <p className="text-[9px] text-[#334155] mt-0.5">{desc}</p>
+        <p className="text-[9px] text-[var(--surface-text-dim)] mt-0.5">{desc}</p>
       </div>
     </div>
   );

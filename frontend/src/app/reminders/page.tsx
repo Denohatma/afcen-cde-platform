@@ -98,10 +98,10 @@ export default function RemindersPage() {
     <div className="mx-auto max-w-[1400px] px-5 py-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white tracking-tight">
+          <h1 className="text-xl font-semibold text-[var(--surface-text-strong)] tracking-tight">
             SLA Tracking & Reminders
           </h1>
-          <p className="text-[10px] text-[#64748b] mt-0.5 uppercase tracking-[0.15em]">
+          <p className="text-[10px] text-[var(--surface-text-muted)] mt-0.5 uppercase tracking-[0.15em]">
             Monitor deliverable deadlines and send reminders
           </p>
         </div>
@@ -109,10 +109,10 @@ export default function RemindersPage() {
           <select
             value={selectedProject || ""}
             onChange={(e) => setSelectedProject(e.target.value)}
-            className="bg-white/[0.04] border border-white/[0.06] rounded-xl px-3 py-2 text-[11px] text-[#c8d0dc] outline-none focus:border-[#ff8c00]/30"
+            className="bg-[var(--surface-input)] border border-[var(--surface-border)] rounded-xl px-3 py-2 text-[11px] text-[var(--surface-text)] outline-none focus:border-[#ff8c00]/30"
           >
             {projects.map((p) => (
-              <option key={p.id} value={p.id} className="bg-[#0d0f14]">
+              <option key={p.id} value={p.id} className="bg-[var(--surface-bg)]">
                 {p.name}
               </option>
             ))}
@@ -129,7 +129,7 @@ export default function RemindersPage() {
               <div key={key} className="glass-card p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Icon className="h-3.5 w-3.5" style={{ color: cfg.color }} />
-                  <span className="text-[10px] text-[#475569]">{cfg.label}</span>
+                  <span className="text-[10px] text-[var(--surface-text-faint)]">{cfg.label}</span>
                 </div>
                 <span className="text-2xl font-semibold tabular-nums" style={{ color: cfg.color }}>
                   {summary[key]}
@@ -141,18 +141,18 @@ export default function RemindersPage() {
       )}
 
       {loading ? (
-        <div className="text-center py-12 text-[#64748b] text-xs">Loading SLA data...</div>
+        <div className="text-center py-12 text-[var(--surface-text-muted)] text-xs">Loading SLA data...</div>
       ) : deliverables.length === 0 ? (
         <div className="glass-card p-8 text-center">
-          <Bell className="h-6 w-6 text-[#1e293b] mx-auto mb-2" />
-          <p className="text-[11px] text-[#475569]">No deliverables found for this project</p>
+          <Bell className="h-6 w-6 text-[var(--surface-text-dim)] mx-auto mb-2" />
+          <p className="text-[11px] text-[var(--surface-text-faint)]">No deliverables found for this project</p>
         </div>
       ) : (
         <div className="glass-card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-[11px]">
               <thead>
-                <tr className="border-b border-white/6 text-[#ff8c00]">
+                <tr className="border-b border-[var(--surface-border)] text-[#ff8c00]">
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Code</th>
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Deliverable</th>
                   <th className="text-center px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">State</th>
@@ -167,22 +167,22 @@ export default function RemindersPage() {
                   const cfg = STATUS_CONFIG[d.sla_status] || STATUS_CONFIG.no_deadline;
                   const Icon = cfg.icon;
                   return (
-                    <tr key={d.id} className="border-b border-white/[0.03] hover:bg-[#ff8c00]/[0.03] transition-colors">
-                      <td className="px-3 py-2.5 text-[#475569] mono">{d.code}</td>
+                    <tr key={d.id} className="border-b border-[var(--surface-border)] hover:bg-[var(--surface-hover)] transition-colors">
+                      <td className="px-3 py-2.5 text-[var(--surface-text-faint)] mono">{d.code}</td>
                       <td className="px-3 py-2.5">
                         <Link
                           href={`/deliverables/${d.id}`}
-                          className="text-[#c8d0dc] hover:text-[#ff8c00] transition-colors flex items-center gap-1"
+                          className="text-[var(--surface-text)] hover:text-[#ff8c00] transition-colors flex items-center gap-1"
                         >
                           {d.title} <ArrowRight className="h-2.5 w-2.5 opacity-0 group-hover:opacity-100" />
                         </Link>
                       </td>
                       <td className="px-3 py-2.5 text-center">
-                        <span className="text-[9px] px-2 py-0.5 rounded-md mono bg-white/5 text-[#64748b]">
+                        <span className="text-[9px] px-2 py-0.5 rounded-md mono bg-[var(--surface-badge)] text-[var(--surface-text-muted)]">
                           {d.state}
                         </span>
                       </td>
-                      <td className="px-3 py-2.5 text-center text-[#64748b] mono">
+                      <td className="px-3 py-2.5 text-center text-[var(--surface-text-muted)] mono">
                         {d.due_date || "—"}
                       </td>
                       <td className="px-3 py-2.5 text-center tabular-nums" style={{ color: cfg.color }}>
@@ -214,7 +214,7 @@ export default function RemindersPage() {
                             </button>
                           )
                         ) : (
-                          <span className="text-[9px] text-[#334155]">—</span>
+                          <span className="text-[9px] text-[var(--surface-text-dim)]">—</span>
                         )}
                       </td>
                     </tr>

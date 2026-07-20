@@ -38,10 +38,10 @@ export default function BenchmarksPage() {
     <div className="mx-auto max-w-[1400px] px-5 py-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white tracking-tight">
+          <h1 className="text-xl font-semibold text-[var(--surface-text-strong)] tracking-tight">
             Benchmark Library
           </h1>
-          <p className="text-[10px] text-[#64748b] mt-0.5 uppercase tracking-[0.15em]">
+          <p className="text-[10px] text-[var(--surface-text-muted)] mt-0.5 uppercase tracking-[0.15em]">
             Transmission line cost benchmarks from tiered sources
           </p>
         </div>
@@ -52,7 +52,7 @@ export default function BenchmarksPage() {
             ) : (
               <AlertTriangle className="h-3.5 w-3.5 text-[#fbbf24]" />
             )}
-            <span className="text-[10px] text-[#64748b]">
+            <span className="text-[10px] text-[var(--surface-text-muted)]">
               {validation.benchmarks} entries &middot; {validation.sources} sources
             </span>
           </div>
@@ -60,7 +60,7 @@ export default function BenchmarksPage() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-[#64748b] text-xs">
+        <div className="text-center py-12 text-[var(--surface-text-muted)] text-xs">
           Loading library...
         </div>
       ) : (
@@ -68,7 +68,7 @@ export default function BenchmarksPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-[11px]">
               <thead>
-                <tr className="border-b border-white/6 text-[#ff8c00]">
+                <tr className="border-b border-[var(--surface-border)] text-[#ff8c00]">
                   <th className="text-left px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Metric</th>
                   <th className="text-right px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Central</th>
                   <th className="text-right px-3 py-2.5 font-medium uppercase tracking-wider text-[10px]">Range</th>
@@ -84,31 +84,31 @@ export default function BenchmarksPage() {
                 {entries.map((e, i) => (
                   <tr
                     key={i}
-                    className="border-b border-white/[0.03] hover:bg-[#ff8c00]/[0.03] transition-colors"
+                    className="border-b border-[var(--surface-border)] hover:bg-[var(--surface-hover)] transition-colors"
                   >
-                    <td className="px-3 py-2 text-[#c8d0dc]">{e.metric?.replace(/_/g, " ")}</td>
+                    <td className="px-3 py-2 text-[var(--surface-text)]">{e.metric?.replace(/_/g, " ")}</td>
                     <td className="px-3 py-2 text-right text-[#ff8c00] tabular-nums">
                       {e.value?.central?.toFixed(3)}
                     </td>
-                    <td className="px-3 py-2 text-right text-[#64748b] tabular-nums">
+                    <td className="px-3 py-2 text-right text-[var(--surface-text-muted)] tabular-nums">
                       {e.value?.low === e.value?.high ? "—" : `${e.value?.low?.toFixed(3)}–${e.value?.high?.toFixed(3)}`}
                     </td>
-                    <td className="px-3 py-2 text-[#64748b]">{e.value?.unit?.replace(/_/g, " ")}</td>
-                    <td className="px-3 py-2 text-[#64748b]">{e.source_id}</td>
-                    <td className="px-3 py-2 text-center text-[#64748b]">
+                    <td className="px-3 py-2 text-[var(--surface-text-muted)]">{e.value?.unit?.replace(/_/g, " ")}</td>
+                    <td className="px-3 py-2 text-[var(--surface-text-muted)]">{e.source_id}</td>
+                    <td className="px-3 py-2 text-center text-[var(--surface-text-muted)]">
                       {e.asset?.voltage_kv_min ? `${e.asset.voltage_kv_min}–${e.asset.voltage_kv_max}` : "—"}
                     </td>
-                    <td className="px-3 py-2 text-[#64748b]">
+                    <td className="px-3 py-2 text-[var(--surface-text-muted)]">
                       {e.asset?.circuits || "—"}
                     </td>
-                    <td className="px-3 py-2 text-center text-[#64748b]">
+                    <td className="px-3 py-2 text-center text-[var(--surface-text-muted)]">
                       {e.basis?.price_year || "—"}
                     </td>
                     <td className="px-3 py-2 text-center">
                       <span className={`text-[9px] px-1.5 py-0.5 rounded mono ${
                         e.confidence === "high" ? "text-[#22c55e] bg-[#22c55e]/8" :
                         e.confidence === "medium" ? "text-[#fbbf24] bg-[#fbbf24]/8" :
-                        "text-[#64748b] bg-white/5"
+                        "text-[var(--surface-text-muted)] bg-[var(--surface-badge)]"
                       }`}>{e.confidence}</span>
                     </td>
                   </tr>

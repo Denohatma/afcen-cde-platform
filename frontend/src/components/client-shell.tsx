@@ -14,6 +14,8 @@ import {
   LogOut,
   FileText,
   Bell,
+  Sun,
+  Moon,
 } from "lucide-react";
 import Chatbot from "./chatbot";
 
@@ -51,13 +53,26 @@ export default function ClientShell({ children }: { children: ReactNode }) {
   const [role, setRoleState] = useState<Role>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
   const pathname = usePathname();
 
   useEffect(() => {
     const saved = localStorage.getItem("cde_role") as Role;
     if (saved && ROLE_PERMISSIONS[saved]) setRoleState(saved);
+    const savedTheme = localStorage.getItem("cde_theme") as "dark" | "light" | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle("light", savedTheme === "light");
+    }
     setMounted(true);
   }, []);
+
+  const toggleTheme = () => {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    localStorage.setItem("cde_theme", next);
+    document.documentElement.classList.toggle("light", next === "light");
+  };
 
   const setRole = (r: Role) => {
     setRoleState(r);
@@ -97,7 +112,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
                     AfCEN
                   </span>
                 </Link>
-                <div className="h-5 w-px bg-white/8" />
+                <div className="h-5 w-px bg-[var(--surface-border)]" />
                 <div className="flex items-center gap-1 text-[11px]">
                   {navItems.filter(n => hasPermission(n.perm)).map((item) => {
                     const Icon = item.icon;
@@ -108,8 +123,8 @@ export default function ClientShell({ children }: { children: ReactNode }) {
                         href={item.href}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
                           active
-                            ? "text-[#ff8c00] bg-[#ff8c00]/8"
-                            : "text-[#64748b] hover:text-[#94a3b8] hover:bg-white/[0.03]"
+                            ? "text-[var(--primary)] bg-[var(--primary)]/8"
+                            : "text-[var(--surface-text-muted)] hover:text-[var(--surface-text)] hover:bg-[var(--surface-hover)]"
                         }`}
                       >
                         <Icon className="h-3.5 w-3.5" />
@@ -119,14 +134,23 @@ export default function ClientShell({ children }: { children: ReactNode }) {
                   })}
                 </div>
               </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center justify-center w-8 h-8 rounded-lg text-[var(--surface-text-muted)] hover:text-[var(--primary)] hover:bg-[var(--surface-hover)] transition-all"
+                  title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                >
+                  {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+                </button>
+                <div className="h-5 w-px bg-[var(--surface-border)]" />
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] text-[#94a3b8] hover:bg-white/[0.03] transition-all"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] text-[var(--surface-text-muted)] hover:bg-[var(--surface-hover)] transition-all"
                 >
                   <User className="h-3.5 w-3.5" />
                   <span>{ROLE_LABELS[role] || role}</span>
-                  <ChevronDown className="h-3 w-3 text-[#475569]" />
+                  <ChevronDown className="h-3 w-3 text-[var(--surface-text-faint)]" />
                 </button>
                 {menuOpen && (
                   <>
@@ -137,16 +161,16 @@ export default function ClientShell({ children }: { children: ReactNode }) {
                           key={key}
                           onClick={() => { setRole(key as Role); setMenuOpen(false); }}
                           className={`w-full text-left px-3 py-2 rounded-lg text-[11px] transition-all ${
-                            role === key ? "text-[#ff8c00] bg-[#ff8c00]/8" : "text-[#94a3b8] hover:text-white hover:bg-white/[0.04]"
+                            role === key ? "text-[var(--primary)] bg-[var(--primary)]/8" : "text-[var(--surface-text-muted)] hover:text-[var(--surface-text-strong)] hover:bg-[var(--surface-hover)]"
                           }`}
                         >
                           {label}
                         </button>
                       ))}
-                      <div className="border-t border-white/6 mt-1 pt-1">
+                      <div className="border-t border-[var(--surface-border)] mt-1 pt-1">
                         <button
                           onClick={() => { setRole(null); setMenuOpen(false); }}
-                          className="w-full text-left px-3 py-2 rounded-lg text-[11px] text-[#64748b] hover:text-[#ef4444] hover:bg-[#ef4444]/5 transition-all flex items-center gap-2"
+                          className="w-full text-left px-3 py-2 rounded-lg text-[11px] text-[var(--surface-text-muted)] hover:text-[#ef4444] hover:bg-[#ef4444]/5 transition-all flex items-center gap-2"
                         >
                           <LogOut className="h-3 w-3" /> Sign Out
                         </button>
@@ -154,6 +178,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
                     </div>
                   </>
                 )}
+              </div>
               </div>
             </div>
           </nav>

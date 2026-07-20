@@ -55,7 +55,7 @@ export default function ProjectDetailPage({
 
   if (loading) {
     return (
-      <div className="text-center py-16 text-[#64748b] text-xs">
+      <div className="text-center py-16 text-[var(--surface-text-muted)] text-xs">
         Loading project...
       </div>
     );
@@ -63,7 +63,7 @@ export default function ProjectDetailPage({
 
   if (!project) {
     return (
-      <div className="text-center py-16 text-[#64748b] text-xs">
+      <div className="text-center py-16 text-[var(--surface-text-muted)] text-xs">
         Project not found
       </div>
     );
@@ -72,17 +72,17 @@ export default function ProjectDetailPage({
   return (
     <div className="mx-auto max-w-[1400px] px-5 py-6">
       <div className="mb-6">
-        <div className="flex items-center gap-2 text-[10px] text-[#475569] mb-2 uppercase tracking-[0.12em]">
+        <div className="flex items-center gap-2 text-[10px] text-[var(--surface-text-faint)] mb-2 uppercase tracking-[0.12em]">
           <Link href="/projects" className="hover:text-[#ff8c00] transition-colors">
             Projects
           </Link>
           <span>/</span>
           <span className="text-[#94a3b8]">{project.name}</span>
         </div>
-        <h1 className="text-xl font-semibold text-white tracking-tight">
+        <h1 className="text-xl font-semibold text-[var(--surface-text-strong)] tracking-tight">
           {project.name}
         </h1>
-        <p className="text-[11px] text-[#64748b] mt-0.5">{project.description}</p>
+        <p className="text-[11px] text-[var(--surface-text-muted)] mt-0.5">{project.description}</p>
       </div>
 
       <div className="mb-6">
@@ -94,8 +94,8 @@ export default function ProjectDetailPage({
 
         {deliverables.length === 0 ? (
           <div className="glass-card p-8 text-center">
-            <FileText className="h-7 w-7 text-[#1e293b] mx-auto mb-2" />
-            <p className="text-xs text-[#64748b]">No deliverables yet</p>
+            <FileText className="h-7 w-7 text-[var(--surface-text-dim)] mx-auto mb-2" />
+            <p className="text-xs text-[var(--surface-text-muted)]">No deliverables yet</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -111,10 +111,10 @@ export default function ProjectDetailPage({
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 min-w-0">
-                      <span className="text-[10px] text-[#475569] shrink-0 w-14">
+                      <span className="text-[10px] text-[var(--surface-text-faint)] shrink-0 w-14">
                         {d.code}
                       </span>
-                      <span className="text-sm text-white truncate group-hover:text-[#ff8c00] transition-colors">
+                      <span className="text-sm text-[var(--surface-text-strong)] truncate group-hover:text-[#ff8c00] transition-colors">
                         {d.title}
                       </span>
                       <span
@@ -147,7 +147,7 @@ export default function ProjectDetailPage({
                           {fc.advisory}
                         </span>
                       )}
-                      <ArrowRight className="h-3.5 w-3.5 text-[#334155] group-hover:text-[#ff8c00] transition-colors" />
+                      <ArrowRight className="h-3.5 w-3.5 text-[var(--surface-text-dim)] group-hover:text-[#ff8c00] transition-colors" />
                     </div>
                   </div>
                 </Link>

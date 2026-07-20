@@ -40,10 +40,10 @@ export default function RoleSelectorPage() {
               <FileCheck className="h-6 w-6 text-[#ff8c00]" />
             </div>
           </div>
-          <h1 className="text-2xl font-semibold text-white tracking-tight mb-2">
+          <h1 className="text-2xl font-semibold text-[var(--surface-text-strong)] tracking-tight mb-2">
             AfCEN Common Data Environment
           </h1>
-          <p className="text-sm text-[#64748b]">
+          <p className="text-sm text-[var(--surface-text-muted)]">
             Select your role to continue
           </p>
         </div>
@@ -67,13 +67,13 @@ export default function RoleSelectorPage() {
                     <Icon className="h-4 w-4" style={{ color: r.color }} />
                   </div>
                   <ArrowRight
-                    className="h-4 w-4 text-[#334155] group-hover:text-[#64748b] transition-all group-hover:translate-x-0.5"
+                    className="h-4 w-4 text-[var(--surface-text-dim)] group-hover:text-[var(--surface-text-muted)] transition-all group-hover:translate-x-0.5"
                   />
                 </div>
-                <h3 className="text-[13px] font-medium text-white mb-1">
+                <h3 className="text-[13px] font-medium text-[var(--surface-text-strong)] mb-1">
                   {r.label}
                 </h3>
-                <p className="text-[11px] text-[#64748b] leading-relaxed">
+                <p className="text-[11px] text-[var(--surface-text-muted)] leading-relaxed">
                   {r.description}
                 </p>
               </button>
@@ -81,7 +81,7 @@ export default function RoleSelectorPage() {
           })}
         </div>
 
-        <p className="text-center text-[10px] text-[#334155] mt-8">
+        <p className="text-center text-[10px] text-[var(--surface-text-dim)] mt-8">
           Bulambuli-Moroto 132 kV IPT — Feasibility Study Review Platform
         </p>
       </div>

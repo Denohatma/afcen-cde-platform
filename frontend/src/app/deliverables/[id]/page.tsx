@@ -145,8 +145,8 @@ export default function DeliverableReviewPage({
     });
   };
 
-  if (loading) return <div className="text-center py-16 text-[#64748b] text-xs">Loading review...</div>;
-  if (!deliverable) return <div className="text-center py-16 text-[#64748b] text-xs">Deliverable not found</div>;
+  if (loading) return <div className="text-center py-16 text-[var(--surface-text-muted)] text-xs">Loading review...</div>;
+  if (!deliverable) return <div className="text-center py-16 text-[var(--surface-text-muted)] text-xs">Deliverable not found</div>;
 
   const openFlags = flags.filter((f) => f.status === "open");
   const resolvedFlags = flags.filter((f) => f.status !== "open");
@@ -161,12 +161,12 @@ export default function DeliverableReviewPage({
       {/* Header */}
       <div className="glass-elevated flex items-center justify-between px-5 py-2.5 z-10">
         <div className="flex items-center gap-3">
-          <Link href={`/projects/${deliverable.project_id}`} className="text-[10px] text-[#475569] hover:text-[#ff8c00] transition-colors uppercase tracking-wider">
+          <Link href={`/projects/${deliverable.project_id}`} className="text-[10px] text-[var(--surface-text-faint)] hover:text-[#ff8c00] transition-colors uppercase tracking-wider">
             &larr; Back
           </Link>
           <div className="h-3.5 w-px bg-white/10" />
-          <span className="text-[10px] text-[#475569]">{deliverable.code}</span>
-          <span className="text-sm font-medium text-white">{deliverable.title}</span>
+          <span className="text-[10px] text-[var(--surface-text-faint)]">{deliverable.code}</span>
+          <span className="text-sm font-medium text-[var(--surface-text-strong)]">{deliverable.title}</span>
           <span className="text-[10px] px-2 py-0.5 rounded-md uppercase tracking-wider" style={{ color: stateColor, backgroundColor: `${stateColor}12`, border: `1px solid ${stateColor}25` }}>
             {deliverable.state}
           </span>
@@ -179,7 +179,7 @@ export default function DeliverableReviewPage({
           )}
           {deliverable.state === "shared" && (
             <>
-              <button onClick={() => handleTransition("wip")} disabled={transitioning} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[#64748b] text-[11px] hover:text-white hover:bg-white/5 transition-all border border-white/6 disabled:opacity-50">
+              <button onClick={() => handleTransition("wip")} disabled={transitioning} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[var(--surface-text-muted)] text-[11px] hover:text-[var(--surface-text-strong)] hover:bg-[var(--surface-badge)] transition-all border border-[var(--surface-border)] disabled:opacity-50">
                 Withdraw
               </button>
               <button onClick={() => handleTransition("published")} disabled={transitioning || hasBlockingOpen} className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#22c55e]/15 text-[#22c55e] text-[11px] hover:bg-[#22c55e]/25 transition-all border border-[#22c55e]/20 disabled:opacity-50" title={hasBlockingOpen ? "Cannot publish with open blocking flags" : "Publish"}>
@@ -198,7 +198,7 @@ export default function DeliverableReviewPage({
       {/* Panels */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left: Document */}
-        <div className="w-1/2 border-r border-white/[0.04] overflow-y-auto">
+        <div className="w-1/2 border-r border-[var(--surface-border)] overflow-y-auto">
           <div className="p-4 space-y-3">
             <div className="glass-card overflow-hidden">
               {latestVersion && latestVersion.file_name.endsWith(".pdf") ? (
@@ -210,21 +210,21 @@ export default function DeliverableReviewPage({
                 />
               ) : latestVersion ? (
                 <div className="p-8 text-center">
-                  <FileText className="h-8 w-8 text-[#1e293b] mx-auto mb-2" />
-                  <p className="text-sm text-white">{latestVersion.file_name}</p>
-                  <p className="text-[10px] text-[#64748b] mt-1">{latestVersion.file_type || "Unknown"} &middot; v{latestVersion.version_number}</p>
+                  <FileText className="h-8 w-8 text-[var(--surface-text-dim)] mx-auto mb-2" />
+                  <p className="text-sm text-[var(--surface-text-strong)]">{latestVersion.file_name}</p>
+                  <p className="text-[10px] text-[var(--surface-text-muted)] mt-1">{latestVersion.file_type || "Unknown"} &middot; v{latestVersion.version_number}</p>
                 </div>
               ) : (
                 <div className="p-10 text-center">
-                  <FileText className="h-8 w-8 text-[#1e293b] mx-auto mb-2" />
-                  <p className="text-xs text-[#64748b]">No document uploaded</p>
-                  <p className="text-[10px] text-[#475569] mt-1">Upload a deliverable to begin review</p>
+                  <FileText className="h-8 w-8 text-[var(--surface-text-dim)] mx-auto mb-2" />
+                  <p className="text-xs text-[var(--surface-text-muted)]">No document uploaded</p>
+                  <p className="text-[10px] text-[var(--surface-text-faint)] mt-1">Upload a deliverable to begin review</p>
                 </div>
               )}
             </div>
 
             <input ref={fileInputRef} type="file" onChange={handleUpload} className="hidden" accept=".pdf,.docx,.xlsx,.csv" />
-            <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-white/8 hover:border-[#ff8c00]/25 text-[#64748b] text-[11px] hover:text-[#ff8c00] hover:bg-[#ff8c00]/[0.02] transition-all disabled:opacity-50">
+            <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-dashed border-white/8 hover:border-[#ff8c00]/25 text-[var(--surface-text-muted)] text-[11px] hover:text-[#ff8c00] hover:bg-[#ff8c00]/[0.02] transition-all disabled:opacity-50">
               <FileUp className="h-3.5 w-3.5" />
               {uploading ? "Uploading..." : "Upload New Version"}
             </button>
@@ -242,12 +242,12 @@ export default function DeliverableReviewPage({
                     ["Uploaded", new Date(latestVersion.created_at).toLocaleString()],
                   ].map(([label, val]) => (
                     <div key={label} className="flex justify-between">
-                      <span className="text-[#64748b]">{label}</span>
-                      <span className="text-[#c8d0dc] truncate ml-4">{val}</span>
+                      <span className="text-[var(--surface-text-muted)]">{label}</span>
+                      <span className="text-[var(--surface-text)] truncate ml-4">{val}</span>
                     </div>
                   ))}
                   <div className="flex justify-between">
-                    <span className="text-[#64748b]">Extraction</span>
+                    <span className="text-[var(--surface-text-muted)]">Extraction</span>
                     <span className={latestVersion.extraction_confirmed ? "text-[#22c55e]" : "text-[#fbbf24]"}>
                       {latestVersion.extraction_confirmed ? "Confirmed" : "Pending"}
                     </span>
@@ -258,18 +258,18 @@ export default function DeliverableReviewPage({
 
             {versions.length > 1 && (
               <div className="glass-card p-4">
-                <h3 className="text-[10px] font-semibold text-[#64748b] uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
+                <h3 className="text-[10px] font-semibold text-[var(--surface-text-muted)] uppercase tracking-[0.15em] mb-3 flex items-center gap-2">
                   <History className="h-3 w-3" /> Version History
                 </h3>
                 <div className="space-y-1">
                   {versions.map((v) => (
                     <div key={v.id} className={`flex items-center justify-between text-[11px] py-1.5 px-2 rounded-md ${v.id === latestVersion?.id ? "bg-[#ff8c00]/5 border border-[#ff8c00]/10" : ""}`}>
                       <div className="flex items-center gap-2">
-                        <span className="text-[#c8d0dc]">v{v.version_number}</span>
-                        <span className="text-[#334155]">&middot;</span>
-                        <span className="text-[#64748b]">{v.file_name}</span>
+                        <span className="text-[var(--surface-text)]">v{v.version_number}</span>
+                        <span className="text-[var(--surface-text-dim)]">&middot;</span>
+                        <span className="text-[var(--surface-text-muted)]">{v.file_name}</span>
                       </div>
-                      <span className="text-[#475569]">{new Date(v.created_at).toLocaleDateString()}</span>
+                      <span className="text-[var(--surface-text-faint)]">{new Date(v.created_at).toLocaleDateString()}</span>
                     </div>
                   ))}
                 </div>
@@ -297,9 +297,9 @@ export default function DeliverableReviewPage({
 
             {flags.length === 0 ? (
               <div className="text-center py-12">
-                <CheckCircle2 className="h-7 w-7 text-[#1e293b] mx-auto mb-2" />
-                <p className="text-xs text-[#64748b]">No flags raised</p>
-                <p className="text-[10px] text-[#475569] mt-1">Submit for review to trigger automated checks</p>
+                <CheckCircle2 className="h-7 w-7 text-[var(--surface-text-dim)] mx-auto mb-2" />
+                <p className="text-xs text-[var(--surface-text-muted)]">No flags raised</p>
+                <p className="text-[10px] text-[var(--surface-text-faint)] mt-1">Submit for review to trigger automated checks</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -307,13 +307,13 @@ export default function DeliverableReviewPage({
                   const isExpanded = expandedGroups.has(group.key);
                   return (
                     <div key={group.key} className="glass-card overflow-hidden">
-                      <button onClick={() => toggleGroup(group.key)} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors">
+                      <button onClick={() => toggleGroup(group.key)} className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[var(--surface-input)] transition-colors">
                         <span style={{ color: group.color }}>{group.icon}</span>
-                        <span className="text-[11px] font-semibold text-white uppercase tracking-[0.12em] flex-1 text-left">{group.label}</span>
+                        <span className="text-[11px] font-semibold text-[var(--surface-text-strong)] uppercase tracking-[0.12em] flex-1 text-left">{group.label}</span>
                         <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ color: group.color, backgroundColor: `${group.color}12` }}>
                           {group.flags.length} open
                         </span>
-                        {isExpanded ? <ChevronDown className="h-3.5 w-3.5 text-[#334155]" /> : <ChevronRight className="h-3.5 w-3.5 text-[#334155]" />}
+                        {isExpanded ? <ChevronDown className="h-3.5 w-3.5 text-[var(--surface-text-dim)]" /> : <ChevronRight className="h-3.5 w-3.5 text-[var(--surface-text-dim)]" />}
                       </button>
                       {isExpanded && (
                         <div className="px-2 pb-2 space-y-1.5">
@@ -328,7 +328,7 @@ export default function DeliverableReviewPage({
 
                 {resolvedFlags.length > 0 && (
                   <div className="mt-4">
-                    <h3 className="text-[10px] text-[#475569] uppercase tracking-[0.15em] mb-2 px-1">Resolved ({resolvedFlags.length})</h3>
+                    <h3 className="text-[10px] text-[var(--surface-text-faint)] uppercase tracking-[0.15em] mb-2 px-1">Resolved ({resolvedFlags.length})</h3>
                     <div className="space-y-1.5 opacity-50">
                       {resolvedGroups.map((group) => (
                         <div key={group.key} className="space-y-1.5">
@@ -358,36 +358,36 @@ function FlagCard({ flag, expanded, onToggle, onResolve, resolving }: {
 
   return (
     <div className="rounded-lg overflow-hidden" style={{ backgroundColor: sev.bg, border: `1px solid ${sev.border}` }}>
-      <button onClick={onToggle} className="w-full flex items-start gap-2.5 p-3 text-left hover:bg-white/[0.02] transition-colors">
+      <button onClick={onToggle} className="w-full flex items-start gap-2.5 p-3 text-left hover:bg-[var(--surface-input)] transition-colors">
         <SevIcon className="h-3.5 w-3.5 shrink-0 mt-0.5" style={{ color: sev.color }} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-medium text-white">{flag.title}</span>
+            <span className="text-[11px] font-medium text-[var(--surface-text-strong)]">{flag.title}</span>
             <span className="text-[9px] px-1.5 py-0.5 rounded-md" style={{ color: statusInfo.color, backgroundColor: `${statusInfo.color}12` }}>{statusInfo.label}</span>
           </div>
           <div className="flex items-center gap-2 mt-0.5">
             <span className="text-[9px] px-1 rounded" style={{ color: sev.color, backgroundColor: `${sev.color}12` }}>{sev.label}</span>
-            <span className="text-[9px] text-[#475569]">{flag.check_id}</span>
+            <span className="text-[9px] text-[var(--surface-text-faint)]">{flag.check_id}</span>
           </div>
         </div>
-        {expanded ? <ChevronDown className="h-3.5 w-3.5 text-[#334155] shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 text-[#334155] shrink-0" />}
+        {expanded ? <ChevronDown className="h-3.5 w-3.5 text-[var(--surface-text-dim)] shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 text-[var(--surface-text-dim)] shrink-0" />}
       </button>
 
       {expanded && (
-        <div className="px-3 pb-3 border-t border-white/[0.03]">
+        <div className="px-3 pb-3 border-t border-[var(--surface-border)]">
           <p className="text-[11px] text-[#94a3b8] mt-3 leading-relaxed">{flag.description}</p>
           {flag.chain && (
             <details className="mt-3">
-              <summary className="text-[9px] text-[#475569] cursor-pointer hover:text-[#94a3b8] uppercase tracking-wider">Evidence chain</summary>
-              <pre className="mt-2 text-[9px] text-[#64748b] bg-black/20 rounded-lg p-2 overflow-x-auto">{JSON.stringify(flag.chain, null, 2)}</pre>
+              <summary className="text-[9px] text-[var(--surface-text-faint)] cursor-pointer hover:text-[#94a3b8] uppercase tracking-wider">Evidence chain</summary>
+              <pre className="mt-2 text-[9px] text-[var(--surface-text-muted)] bg-black/20 rounded-lg p-2 overflow-x-auto">{JSON.stringify(flag.chain, null, 2)}</pre>
             </details>
           )}
           {flag.status === "open" && (
-            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/[0.03]">
+            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[var(--surface-border)]">
               <button onClick={() => onResolve(flag.id, "accepted")} disabled={resolving} className="flex items-center gap-1 px-2 py-1 rounded-md text-[9px] text-[#22c55e] border border-[#22c55e]/15 hover:bg-[#22c55e]/10 disabled:opacity-50 transition-all">
                 <CheckCircle2 className="h-3 w-3" /> Accept
               </button>
-              <button onClick={() => onResolve(flag.id, "dismissed")} disabled={resolving} className="flex items-center gap-1 px-2 py-1 rounded-md text-[9px] text-[#64748b] border border-white/6 hover:bg-white/5 disabled:opacity-50 transition-all">
+              <button onClick={() => onResolve(flag.id, "dismissed")} disabled={resolving} className="flex items-center gap-1 px-2 py-1 rounded-md text-[9px] text-[var(--surface-text-muted)] border border-[var(--surface-border)] hover:bg-[var(--surface-badge)] disabled:opacity-50 transition-all">
                 <XCircle className="h-3 w-3" /> Dismiss
               </button>
               <button onClick={() => onResolve(flag.id, "clarification_requested")} disabled={resolving} className="flex items-center gap-1 px-2 py-1 rounded-md text-[9px] text-[#a78bfa] border border-[#a78bfa]/15 hover:bg-[#a78bfa]/10 disabled:opacity-50 transition-all">
@@ -396,7 +396,7 @@ function FlagCard({ flag, expanded, onToggle, onResolve, resolving }: {
             </div>
           )}
           {flag.resolution_note && (
-            <div className="mt-2 text-[9px] text-[#475569]">
+            <div className="mt-2 text-[9px] text-[var(--surface-text-faint)]">
               Resolution: {flag.resolution_note}{flag.resolved_by && ` (by ${flag.resolved_by})`}
             </div>
           )}

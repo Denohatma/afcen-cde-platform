@@ -182,19 +182,19 @@ export default function Chatbot() {
 
       {open && (
         <div className="fixed bottom-5 right-5 z-50 w-[380px] h-[520px] flex flex-col glass-elevated rounded-2xl overflow-hidden shadow-2xl shadow-black/40 animate-in">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/6">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--surface-border)]">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-[#ff8c00]/10">
                 <Bot className="h-3.5 w-3.5 text-[#ff8c00]" />
               </div>
               <div>
-                <span className="text-[12px] font-medium text-white">AfCEN Assistant</span>
-                <span className="text-[9px] text-[#475569] block">Platform navigation help</span>
+                <span className="text-[12px] font-medium text-[var(--surface-text-strong)]">AfCEN Assistant</span>
+                <span className="text-[9px] text-[var(--surface-text-faint)] block">Platform navigation help</span>
               </div>
             </div>
             <button
               onClick={() => setOpen(false)}
-              className="p-1.5 rounded-lg text-[#64748b] hover:text-white hover:bg-white/5 transition-all"
+              className="p-1.5 rounded-lg text-[var(--surface-text-muted)] hover:text-[var(--surface-text-strong)] hover:bg-[var(--surface-hover)] transition-all"
             >
               <X className="h-4 w-4" />
             </button>
@@ -207,7 +207,7 @@ export default function Chatbot() {
                   className={`max-w-[85%] rounded-xl px-3 py-2 text-[11px] leading-relaxed ${
                     msg.role === "user"
                       ? "bg-[#ff8c00]/15 text-[#ff8c00] border border-[#ff8c00]/20"
-                      : "bg-white/[0.04] text-[#c8d0dc] border border-white/[0.04]"
+                      : "bg-[var(--surface-input)] text-[var(--surface-text)] border border-[var(--surface-border)]"
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{msg.text}</p>
@@ -230,7 +230,7 @@ export default function Chatbot() {
             <div ref={messagesEnd} />
           </div>
 
-          <div className="p-3 border-t border-white/6">
+          <div className="p-3 border-t border-[var(--surface-border)]">
             <div className="flex gap-2">
               <input
                 ref={inputRef}
@@ -239,7 +239,7 @@ export default function Chatbot() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Ask me anything..."
-                className="flex-1 bg-white/[0.04] border border-white/[0.06] rounded-xl px-3 py-2 text-[11px] text-[#c8d0dc] placeholder-[#334155] outline-none focus:border-[#ff8c00]/30 transition-colors"
+                className="flex-1 bg-[var(--surface-input)] border border-[var(--surface-border)] rounded-xl px-3 py-2 text-[11px] text-[var(--surface-text)] placeholder-[var(--surface-text-dim)] outline-none focus:border-[#ff8c00]/30 transition-colors"
               />
               <button
                 onClick={handleSend}
