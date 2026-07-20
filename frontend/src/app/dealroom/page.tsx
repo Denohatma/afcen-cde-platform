@@ -272,37 +272,33 @@ export default function DealRoomPage() {
       const projects = await api.projects.list();
       const allData: ProjectData[] = [];
 
-      for (const proj of projects) {
-        const [deliverables, intelligence, sla] = await Promise.all([
-          api.projects.deliverables(proj.id).catch(() => []),
-          api.intelligence.summary(proj.id).catch(() => null),
-          api.sla.status(proj.id).catch(() => null),
-        ]);
+      const projectResults = await Promise.all(
+        projects.map(async (proj) => {
+          const [deliverables, intelligence, sla] = await Promise.all([
+            api.projects.deliverables(proj.id).catch(() => []),
+            api.intelligence.summary(proj.id).catch(() => null),
+            api.sla.status(proj.id).catch(() => null),
+          ]);
 
-        const extractions = new Map<string, Array<{ metric: string; value: number; unit: string; source_location: string }>>();
-        for (const del of deliverables) {
-          try {
-            const versions = await api.deliverables.versions(del.id);
-            for (const v of versions) {
+          const extractions = new Map<string, Array<{ metric: string; value: number; unit: string; source_location: string }>>();
+          await Promise.all(
+            deliverables.map(async (del) => {
               try {
-                const exts = await api.extractions.list(v.id);
-                if (exts.length > 0) {
-                  const existing = extractions.get(del.code) || [];
-                  extractions.set(del.code, [...existing, ...exts]);
-                }
+                const versions = await api.deliverables.versions(del.id);
+                const allExts = await Promise.all(
+                  versions.map((v) => api.extractions.list(v.id).catch(() => []))
+                );
+                const flat = allExts.flat();
+                if (flat.length > 0) extractions.set(del.code, flat);
               } catch {}
-            }
-          } catch {}
-        }
+            })
+          );
 
-        allData.push({
-          project: proj,
-          deliverables,
-          intelligence,
-          sla,
-          extractions,
-        });
-      }
+          return { project: proj, deliverables, intelligence, sla, extractions };
+        })
+      );
+
+      allData.push(...projectResults);
 
       setProjectData(allData);
       setMessages([{

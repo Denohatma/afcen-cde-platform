@@ -284,15 +284,22 @@ export default function DeliverableReviewPage({
             <div className="flex items-center gap-3 mb-4 px-1">
               <span className="text-[10px] text-[#ff8c00] uppercase tracking-[0.15em] font-semibold">Evaluation Summary</span>
               <div className="flex-1" />
-              {openFlags.filter((f) => f.severity === "blocking").length > 0 && (
-                <span className="flex items-center gap-1 text-[10px] text-[#ef4444]"><AlertCircle className="h-3 w-3" />{openFlags.filter((f) => f.severity === "blocking").length} blocking</span>
-              )}
-              {openFlags.filter((f) => f.severity === "material").length > 0 && (
-                <span className="flex items-center gap-1 text-[10px] text-[#fbbf24]"><AlertTriangle className="h-3 w-3" />{openFlags.filter((f) => f.severity === "material").length} material</span>
-              )}
-              {openFlags.filter((f) => f.severity === "advisory").length > 0 && (
-                <span className="flex items-center gap-1 text-[10px] text-[#38bdf8]"><Info className="h-3 w-3" />{openFlags.filter((f) => f.severity === "advisory").length} advisory</span>
-              )}
+              {(() => {
+                const counts = openFlags.reduce((acc, f) => { acc[f.severity] = (acc[f.severity] || 0) + 1; return acc; }, {} as Record<string, number>);
+                return (
+                  <>
+                    {(counts.blocking || 0) > 0 && (
+                      <span className="flex items-center gap-1 text-[10px] text-[#ef4444]"><AlertCircle className="h-3 w-3" />{counts.blocking} blocking</span>
+                    )}
+                    {(counts.material || 0) > 0 && (
+                      <span className="flex items-center gap-1 text-[10px] text-[#fbbf24]"><AlertTriangle className="h-3 w-3" />{counts.material} material</span>
+                    )}
+                    {(counts.advisory || 0) > 0 && (
+                      <span className="flex items-center gap-1 text-[10px] text-[#38bdf8]"><Info className="h-3 w-3" />{counts.advisory} advisory</span>
+                    )}
+                  </>
+                );
+              })()}
             </div>
 
             {flags.length === 0 ? (

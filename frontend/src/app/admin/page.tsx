@@ -3,23 +3,14 @@
 import { useEffect, useState } from "react";
 import { ShieldCheck, Users, Activity, FileText, Clock } from "lucide-react";
 import { useRole } from "@/components/client-shell";
-
-interface AuditEntry {
-  id: string;
-  action: string;
-  entity_type: string;
-  actor: string;
-  created_at: string;
-  details: { detail?: string } | null;
-}
+import { api, type AuditEntry } from "@/lib/api";
 
 export default function AdminPage() {
   const { role } = useRole();
   const [auditLog, setAuditLog] = useState<AuditEntry[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8001/api/audit-log")
-      .then((r) => r.ok ? r.json() : [])
+    api.audit.global()
       .then(setAuditLog)
       .catch(() => setAuditLog([]));
   }, []);
@@ -115,7 +106,7 @@ export default function AdminPage() {
                     <td className="px-3 py-2.5 text-[var(--surface-text-muted)] mono">{entry.entity_type}</td>
                     <td className="px-3 py-2.5 text-[var(--surface-text)]">{entry.actor}</td>
                     <td className="px-3 py-2.5 text-[var(--surface-text-muted)] truncate max-w-[300px]">
-                      {entry.details?.detail || "—"}
+                      {entry.details ? Object.values(entry.details).filter(v => typeof v === "string").join(", ") || "—" : "—"}
                     </td>
                   </tr>
                 ))

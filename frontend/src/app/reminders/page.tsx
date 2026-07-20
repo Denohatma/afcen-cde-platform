@@ -60,7 +60,7 @@ export default function RemindersPage() {
         );
         const best = results
           .filter(Boolean)
-          .sort((a, b) => (b!.summary.overdue + b!.summary.urgent + b!.summary.total) - (a!.summary.overdue + a!.summary.urgent + a!.summary.total));
+          .sort((a, b) => (b!.summary.overdue + b!.summary.urgent) - (a!.summary.overdue + a!.summary.urgent));
         setSelectedProject(best[0] ? p[results.indexOf(best[0])].id : p[0].id);
       }
     }).finally(() => setLoading(false));

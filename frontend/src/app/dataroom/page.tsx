@@ -13,12 +13,11 @@ export default function DataRoomPage() {
     api.projects.list()
       .then(async (projs) => {
         setProjects(projs);
+        const results = await Promise.all(
+          projs.map((p) => api.dataroom.get(p.id).catch(() => null))
+        );
         const rooms: Record<string, DataRoom> = {};
-        for (const p of projs) {
-          try {
-            rooms[p.id] = await api.dataroom.get(p.id);
-          } catch {}
-        }
+        results.forEach((r, i) => { if (r) rooms[projs[i].id] = r; });
         setDatarooms(rooms);
       })
       .catch(() => {})

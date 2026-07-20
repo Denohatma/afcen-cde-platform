@@ -43,19 +43,17 @@ export default function DashboardPage() {
         setProjects(p);
         setStats(s);
         if (p.length > 0) {
-          try {
-            const results = await Promise.all(p.map(proj => api.intelligence.summary(proj.id).catch(() => null)));
-            const best = results.filter(Boolean).sort((a, b) => (b!.summary.total_open + b!.stages.length) - (a!.summary.total_open + a!.stages.length))[0];
-            if (best) setIntelligence(best);
-          } catch {}
-          try {
-            const slaResults = await Promise.all(p.map(proj => api.sla.status(proj.id).catch(() => null)));
-            const totals = slaResults.filter(Boolean).reduce(
-              (acc, r) => ({ overdue: acc.overdue + r!.summary.overdue, urgent: acc.urgent + r!.summary.urgent }),
-              { overdue: 0, urgent: 0 }
-            );
-            setSlaAlerts(totals);
-          } catch {}
+          const [intelResults, slaResults] = await Promise.all([
+            Promise.all(p.map(proj => api.intelligence.summary(proj.id).catch(() => null))),
+            Promise.all(p.map(proj => api.sla.status(proj.id).catch(() => null))),
+          ]);
+          const best = intelResults.filter(Boolean).sort((a, b) => (b!.summary.total_open + b!.stages.length) - (a!.summary.total_open + a!.stages.length))[0];
+          if (best) setIntelligence(best);
+          const totals = slaResults.filter(Boolean).reduce(
+            (acc, r) => ({ overdue: acc.overdue + r!.summary.overdue, urgent: acc.urgent + r!.summary.urgent }),
+            { overdue: 0, urgent: 0 }
+          );
+          setSlaAlerts(totals);
         }
       })
       .catch(() => setProjects([]))

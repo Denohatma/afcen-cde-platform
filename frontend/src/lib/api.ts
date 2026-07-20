@@ -219,6 +219,7 @@ export const api = {
   },
   audit: {
     list: (projectId: string) => request<AuditEntry[]>(`/projects/${projectId}/audit`),
+    global: () => request<AuditEntry[]>("/audit-log"),
   },
   sla: {
     status: (projectId: string) =>
