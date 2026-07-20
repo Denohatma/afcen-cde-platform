@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   Handshake,
   Settings,
+  ClipboardCheck,
 } from "lucide-react";
 import Chatbot from "./chatbot";
 
@@ -32,10 +33,10 @@ interface RoleContextType {
 }
 
 const ROLE_PERMISSIONS: Record<string, string[]> = {
-  developer: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "versions.read", "flags.read", "dataroom.read", "settings.read"],
-  consultant: ["projects.read", "deliverables.read", "deliverables.upload", "deliverables.transition", "versions.read", "flags.read", "flags.respond", "extractions.read", "settings.read"],
-  afcen_lead: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "deliverables.transition", "deliverables.publish", "versions.read", "flags.read", "flags.resolve", "extractions.read", "extractions.confirm", "benchmarks.read", "benchmarks.manage", "dataroom.read", "dataroom.manage", "intelligence.read", "export.read", "audit.read", "admin.read", "dealroom.read", "settings.read"],
-  investor: ["projects.read", "deliverables.read", "dataroom.read", "intelligence.read", "dealroom.read", "settings.read"],
+  developer: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "versions.read", "flags.read", "dataroom.read", "dealroom.read", "reviews.read", "settings.read"],
+  consultant: ["projects.read", "deliverables.read", "deliverables.upload", "deliverables.transition", "versions.read", "flags.read", "flags.respond", "extractions.read", "dealroom.read", "reviews.read", "settings.read"],
+  afcen_lead: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "deliverables.transition", "deliverables.publish", "versions.read", "flags.read", "flags.resolve", "extractions.read", "extractions.confirm", "benchmarks.read", "benchmarks.manage", "dataroom.read", "dataroom.manage", "intelligence.read", "export.read", "audit.read", "admin.read", "dealroom.read", "reviews.read", "settings.read"],
+  investor: ["projects.read", "deliverables.read", "dataroom.read", "intelligence.read", "dealroom.read", "reviews.read", "settings.read"],
 };
 
 const ROLE_LABELS: Record<string, string> = {
@@ -104,6 +105,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
     { href: "/benchmarks", label: "Benchmarks", icon: Database, perm: "benchmarks.read" },
     { href: "/dataroom", label: "Data Room", icon: Vault, perm: "dataroom.read" },
     { href: "/reminders", label: "Reminders", icon: Bell, perm: "projects.read" },
+    { href: "/reviews", label: "Reviews", icon: ClipboardCheck, perm: "reviews.read" },
     { href: "/admin", label: "Admin", icon: ShieldCheck, perm: "admin.read" },
     { href: "/dealroom", label: "Deal Room", icon: Handshake, perm: "dealroom.read" },
     { href: "/settings", label: "Settings", icon: Settings, perm: "settings.read" },

@@ -153,6 +153,7 @@ export const api = {
     get: (id: string) => request<Project>(`/projects/${id}`),
     create: (data: { name: string; description: string; source_id?: string }) =>
       request<Project>("/projects", { method: "POST", body: JSON.stringify(data) }),
+    deliverables: (id: string) => request<Deliverable[]>(`/projects/${id}/deliverables`),
     export: (id: string) =>
       fetch(`${API_BASE}/projects/${id}/export`, { method: "POST" }),
   },

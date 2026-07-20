@@ -27,7 +27,7 @@ function getBotResponse(input: string, role: string | null): Message {
   if (lower.match(/hello|hi|hey|help|start|what can/)) {
     return {
       role: "bot",
-      text: `Welcome to the AfCEN CDE! I can help you navigate the platform. Here are some things I can help with:`,
+      text: `Welcome to the AfCEN Project Manager! I can help you navigate the platform. Here are some things I can help with:`,
       links: [
         { label: "View projects", href: "/projects" },
         { label: "Dashboard overview", href: "/dashboard" },
@@ -102,14 +102,14 @@ function getBotResponse(input: string, role: string | null): Message {
   if (lower.match(/role|permission|access|switch/)) {
     return {
       role: "bot",
-      text: "You can switch roles using the dropdown in the top-right corner. Each role has different access levels:\n• AfCEN Lead — Full access including publish & benchmarks\n• Consultant — Submit deliverables & respond to flags\n• Developer — Create projects & upload studies\n• Investor — Read-only data room access",
+      text: "You can switch roles using the dropdown at the bottom of the sidebar. Each role has different access levels:\n• AfCEN Lead — Full access including publish & benchmarks\n• Consultant — Submit deliverables & respond to flags\n• Developer — Create projects & upload studies\n• Investor — Read-only data room access",
     };
   }
 
   if (lower.match(/workflow|process|how does/)) {
     return {
       role: "bot",
-      text: "The CDE workflow: 1) Developer/Consultant uploads a deliverable version. 2) Transition to Shared triggers intelligence checks. 3) AfCEN Lead reviews flags and resolves issues. 4) Once clear, the deliverable is Published to the Data Room for all stakeholders.",
+      text: "The workflow: 1) Developer/Consultant uploads a deliverable version. 2) Transition to Shared triggers intelligence checks. 3) AfCEN Lead reviews flags and resolves issues. 4) Once clear, the deliverable is Published to the Data Room for all stakeholders.",
       links: [
         { label: "View projects", href: "/projects" },
         { label: "Open Data Room", href: "/dataroom" },

@@ -66,7 +66,7 @@ export default function DashboardPage() {
     <div className="mx-auto max-w-[1440px] px-5 py-6">
       <div className="mb-8">
         <h1 className="text-xl font-semibold text-[var(--surface-text-strong)] tracking-tight mb-1">
-          {role === "investor" ? "Investment Overview" : role === "consultant" ? "Submission Dashboard" : "Common Data Environment"}
+          {role === "investor" ? "Investment Overview" : role === "consultant" ? "Submission Dashboard" : "Project Manager"}
         </h1>
         <p className="text-[11px] text-[var(--surface-text-faint)]">
           Bulambuli-Moroto 132 kV IPT — Feasibility Study Review

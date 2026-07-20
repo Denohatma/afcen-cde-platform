@@ -4,8 +4,8 @@ import ClientShell from "@/components/client-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "AfCEN CDE",
-  description: "AfCEN Common Data Environment",
+  title: "AfCEN Project Manager",
+  description: "AfCEN Project Manager",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

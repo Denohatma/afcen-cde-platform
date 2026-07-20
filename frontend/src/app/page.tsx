@@ -41,7 +41,7 @@ export default function RoleSelectorPage() {
             </div>
           </div>
           <h1 className="text-2xl font-semibold text-[var(--surface-text-strong)] tracking-tight mb-2">
-            AfCEN Common Data Environment
+            AfCEN Project Manager
           </h1>
           <p className="text-sm text-[var(--surface-text-muted)]">
             Select your role to continue
