@@ -157,7 +157,7 @@ export default function DeliverableReviewPage({
   const resolvedGroups = groupFlags(resolvedFlags);
 
   return (
-    <div className="h-[calc(100vh-3rem)] flex flex-col">
+    <div className="h-screen flex flex-col">
       {/* Header */}
       <div className="glass-elevated flex items-center justify-between px-5 py-2.5 z-10">
         <div className="flex items-center gap-3">

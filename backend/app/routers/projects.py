@@ -211,6 +211,25 @@ async def get_audit_log(project_id: str, db: AsyncSession = Depends(get_db)):
     } for l in logs]
 
 
+@router.get("/audit-log")
+async def get_global_audit_log(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(models.AuditLog)
+        .order_by(models.AuditLog.created_at.desc())
+        .limit(50)
+    )
+    logs = result.scalars().all()
+    return [{
+        "id": l.id,
+        "entity_type": l.entity_type,
+        "entity_id": l.entity_id,
+        "action": l.action,
+        "actor": l.actor,
+        "details": l.details,
+        "created_at": l.created_at.isoformat() if l.created_at else None,
+    } for l in logs]
+
+
 @router.get("/projects/{project_id}/sla-status")
 async def get_sla_status(project_id: str, db: AsyncSession = Depends(get_db)):
     project = await db.get(models.Project, project_id)

@@ -9,13 +9,17 @@ import {
   FolderOpen,
   Database,
   Vault,
-  ChevronDown,
-  User,
-  LogOut,
-  FileText,
   Bell,
   Sun,
   Moon,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  User,
+  LogOut,
+  ShieldCheck,
+  Handshake,
+  Settings,
 } from "lucide-react";
 import Chatbot from "./chatbot";
 
@@ -28,10 +32,10 @@ interface RoleContextType {
 }
 
 const ROLE_PERMISSIONS: Record<string, string[]> = {
-  developer: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "versions.read", "flags.read", "dataroom.read"],
-  consultant: ["projects.read", "deliverables.read", "deliverables.upload", "deliverables.transition", "versions.read", "flags.read", "flags.respond", "extractions.read"],
-  afcen_lead: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "deliverables.transition", "deliverables.publish", "versions.read", "flags.read", "flags.resolve", "extractions.read", "extractions.confirm", "benchmarks.read", "benchmarks.manage", "dataroom.read", "dataroom.manage", "intelligence.read", "export.read", "audit.read"],
-  investor: ["projects.read", "deliverables.read", "dataroom.read", "intelligence.read"],
+  developer: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "versions.read", "flags.read", "dataroom.read", "settings.read"],
+  consultant: ["projects.read", "deliverables.read", "deliverables.upload", "deliverables.transition", "versions.read", "flags.read", "flags.respond", "extractions.read", "settings.read"],
+  afcen_lead: ["projects.read", "projects.create", "deliverables.read", "deliverables.upload", "deliverables.transition", "deliverables.publish", "versions.read", "flags.read", "flags.resolve", "extractions.read", "extractions.confirm", "benchmarks.read", "benchmarks.manage", "dataroom.read", "dataroom.manage", "intelligence.read", "export.read", "audit.read", "admin.read", "dealroom.read", "settings.read"],
+  investor: ["projects.read", "deliverables.read", "dataroom.read", "intelligence.read", "dealroom.read", "settings.read"],
 };
 
 const ROLE_LABELS: Record<string, string> = {
@@ -52,6 +56,7 @@ export const useRole = () => useContext(RoleContext);
 export default function ClientShell({ children }: { children: ReactNode }) {
   const [role, setRoleState] = useState<Role>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const pathname = usePathname();
@@ -64,6 +69,8 @@ export default function ClientShell({ children }: { children: ReactNode }) {
       setTheme(savedTheme);
       document.documentElement.classList.toggle("light", savedTheme === "light");
     }
+    const savedCollapsed = localStorage.getItem("cde_sidebar_collapsed");
+    if (savedCollapsed === "true") setSidebarCollapsed(true);
     setMounted(true);
   }, []);
 
@@ -72,6 +79,12 @@ export default function ClientShell({ children }: { children: ReactNode }) {
     setTheme(next);
     localStorage.setItem("cde_theme", next);
     document.documentElement.classList.toggle("light", next === "light");
+  };
+
+  const toggleSidebar = () => {
+    const next = !sidebarCollapsed;
+    setSidebarCollapsed(next);
+    localStorage.setItem("cde_sidebar_collapsed", String(next));
   };
 
   const setRole = (r: Role) => {
@@ -91,6 +104,9 @@ export default function ClientShell({ children }: { children: ReactNode }) {
     { href: "/benchmarks", label: "Benchmarks", icon: Database, perm: "benchmarks.read" },
     { href: "/dataroom", label: "Data Room", icon: Vault, perm: "dataroom.read" },
     { href: "/reminders", label: "Reminders", icon: Bell, perm: "projects.read" },
+    { href: "/admin", label: "Admin", icon: ShieldCheck, perm: "admin.read" },
+    { href: "/dealroom", label: "Deal Room", icon: Handshake, perm: "dealroom.read" },
+    { href: "/settings", label: "Settings", icon: Settings, perm: "settings.read" },
   ];
 
   if (!mounted) return <main className="min-h-screen">{children}</main>;
@@ -100,62 +116,90 @@ export default function ClientShell({ children }: { children: ReactNode }) {
       {!role ? (
         <main className="min-h-screen">{children}</main>
       ) : (
-        <>
-          <nav className="glass-elevated sticky top-0 z-50">
-            <div className="mx-auto max-w-[1600px] flex items-center justify-between px-5 h-12">
-              <div className="flex items-center gap-5">
-                <Link href="/dashboard" className="flex items-center gap-2.5 shrink-0">
-                  <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-[#ff8c00]/10 border border-[#ff8c00]/15">
-                    <FileCheck className="h-3.5 w-3.5 text-[#ff8c00]" />
-                  </div>
-                  <span className="text-[13px] font-semibold tracking-tight text-[#ff8c00]">
+        <div className="flex h-screen overflow-hidden">
+          {/* Sidebar */}
+          <aside
+            className={`glass-elevated flex flex-col border-r border-[var(--surface-border)] z-50 transition-all duration-200 shrink-0 ${
+              sidebarCollapsed ? "w-[60px]" : "w-[220px]"
+            }`}
+          >
+            {/* Logo */}
+            <div className="flex items-center gap-2.5 px-4 h-14 shrink-0 border-b border-[var(--surface-border)]">
+              <Link href="/dashboard" className="flex items-center gap-2.5 shrink-0">
+                <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-[#ff8c00]/10 border border-[#ff8c00]/15 shrink-0">
+                  <FileCheck className="h-4 w-4 text-[#ff8c00]" />
+                </div>
+                {!sidebarCollapsed && (
+                  <span className="text-[14px] font-semibold tracking-tight text-[#ff8c00]">
                     AfCEN
                   </span>
-                </Link>
-                <div className="h-5 w-px bg-[var(--surface-border)]" />
-                <div className="flex items-center gap-1 text-[11px]">
-                  {navItems.filter(n => hasPermission(n.perm)).map((item) => {
-                    const Icon = item.icon;
-                    const active = pathname?.startsWith(item.href);
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                          active
-                            ? "text-[var(--primary)] bg-[var(--primary)]/8"
-                            : "text-[var(--surface-text-muted)] hover:text-[var(--surface-text)] hover:bg-[var(--surface-hover)]"
-                        }`}
-                      >
-                        <Icon className="h-3.5 w-3.5" />
-                        {item.label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={toggleTheme}
-                  className="flex items-center justify-center w-8 h-8 rounded-lg text-[var(--surface-text-muted)] hover:text-[var(--primary)] hover:bg-[var(--surface-hover)] transition-all"
-                  title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                >
-                  {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-                </button>
-                <div className="h-5 w-px bg-[var(--surface-border)]" />
+                )}
+              </Link>
+            </div>
+
+            {/* Nav Items */}
+            <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
+              {navItems.filter(n => hasPermission(n.perm)).map((item) => {
+                const Icon = item.icon;
+                const active = pathname?.startsWith(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    title={sidebarCollapsed ? item.label : undefined}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-[12px] ${
+                      active
+                        ? "text-[#ff8c00] bg-[#ff8c00]/8 border border-[#ff8c00]/12"
+                        : "text-[var(--surface-text-muted)] hover:text-[var(--surface-text-strong)] hover:bg-[var(--surface-hover)] border border-transparent"
+                    }`}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" />
+                    {!sidebarCollapsed && <span>{item.label}</span>}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Bottom controls */}
+            <div className="shrink-0 border-t border-[var(--surface-border)] p-2 space-y-1">
+              {/* Theme toggle */}
+              <button
+                onClick={toggleTheme}
+                title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-[12px] text-[var(--surface-text-muted)] hover:text-[var(--primary)] hover:bg-[var(--surface-hover)] transition-all"
+              >
+                {theme === "dark" ? <Sun className="h-4 w-4 shrink-0" /> : <Moon className="h-4 w-4 shrink-0" />}
+                {!sidebarCollapsed && <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>}
+              </button>
+
+              {/* Collapse toggle */}
+              <button
+                onClick={toggleSidebar}
+                title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-[12px] text-[var(--surface-text-muted)] hover:text-[var(--surface-text-strong)] hover:bg-[var(--surface-hover)] transition-all"
+              >
+                {sidebarCollapsed ? <ChevronRight className="h-4 w-4 shrink-0" /> : <ChevronLeft className="h-4 w-4 shrink-0" />}
+                {!sidebarCollapsed && <span>Collapse</span>}
+              </button>
+
+              {/* Role / User */}
               <div className="relative">
                 <button
                   onClick={() => setMenuOpen(!menuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] text-[var(--surface-text-muted)] hover:bg-[var(--surface-hover)] transition-all"
+                  className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-[12px] text-[var(--surface-text-muted)] hover:bg-[var(--surface-hover)] transition-all"
                 >
-                  <User className="h-3.5 w-3.5" />
-                  <span>{ROLE_LABELS[role] || role}</span>
-                  <ChevronDown className="h-3 w-3 text-[var(--surface-text-faint)]" />
+                  <User className="h-4 w-4 shrink-0" />
+                  {!sidebarCollapsed && (
+                    <>
+                      <span className="flex-1 text-left truncate">{ROLE_LABELS[role] || role}</span>
+                      <ChevronDown className="h-3 w-3 text-[var(--surface-text-faint)] shrink-0" />
+                    </>
+                  )}
                 </button>
                 {menuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                    <div className="absolute right-0 top-full mt-1 w-56 glass-elevated rounded-xl overflow-hidden z-50 p-1">
+                    <div className={`absolute ${sidebarCollapsed ? "left-full ml-2" : "left-0"} bottom-full mb-1 w-56 glass-elevated rounded-xl overflow-hidden z-50 p-1`}>
                       {Object.entries(ROLE_LABELS).map(([key, label]) => (
                         <button
                           key={key}
@@ -179,12 +223,16 @@ export default function ClientShell({ children }: { children: ReactNode }) {
                   </>
                 )}
               </div>
-              </div>
             </div>
-          </nav>
-          <main className="min-h-[calc(100vh-3rem)]">{children}</main>
+          </aside>
+
+          {/* Main content */}
+          <main className="flex-1 overflow-y-auto">
+            {children}
+          </main>
+
           <Chatbot />
-        </>
+        </div>
       )}
     </RoleContext.Provider>
   );
